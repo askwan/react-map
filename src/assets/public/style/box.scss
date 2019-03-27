@@ -1,0 +1,55 @@
+
+
+@each $type,$size in $typeList {
+  .mg-#{$type}{
+    margin: $size;
+  }
+  .mg-left-right-#{$type}{
+    margin: 0px $size;
+  }
+  .mg-top-#{$type}{
+    margin-top: $size;
+  }
+  .mg-bottom-#{$type}{
+    margin-bottom: $size;
+  }
+  .mg-left-#{$type}{
+    margin-left: $size;
+  }
+  .mg-right-#{$type}{
+    margin-right: $size;
+  }
+  .pd-#{$type}{
+    padding: $size;
+  }
+  .pd-top-#{$type}{
+    padding-top: $size;
+  }
+  .pd-left-#{$type}{
+    padding-left: $size;
+  }
+  .pd-right-#{$type}{
+    padding-right: $size;
+  }
+  .pd-bottom-#{$type}{
+    padding-bottom: $size;
+  }
+}
+
+@for $i from 1 through 5 {
+  .radius-#{$i} {
+    border-radius: 2px*$i;
+  } 
+}
+
+@each $name,$color in $colorList {
+  .underline-#{$name}{
+    border-bottom: 1px solid $color;
+  }
+}
+
+@for $i from 1 through 30 {
+  .width-#{$i*10} {
+    width:10px*$i;
+  }
+}

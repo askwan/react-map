@@ -1,0 +1,25 @@
+$large:30px;
+$big:20px;
+$medium:15px;
+$small:10px;
+$mini:5px;
+
+$typeList:(large:$large,big:$big,medium:$medium,small:$small,mini:$mini);
+
+$success:#67C23A;
+$warning:#E6A23C;
+$danger:#F56C6C;
+$info:#909399;
+$blue:#409EFF;
+$black:#333;
+$white:#fff;
+$gray:#999;
+
+$colorList:(success:$success,warning:$warning,danger:$danger,info:$info,blue:$blue,black:$black,white:$white,gray:$gray);
+
+$linear: all 0.2s linear;
+$shadow: 0 0 3px #999;
+
+$aligns:center,left,right,justify;
+
+

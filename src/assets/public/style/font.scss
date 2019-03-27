@@ -1,0 +1,86 @@
+
+
+@for $i from 10 through 36 {
+  .font-#{$i}{
+    font-size: 1px*$i;
+  }
+}
+
+@each $name,$color in $colorList{
+  .font-#{$name}{
+    color: $color;
+  }
+}
+
+@each $align in $aligns {
+  .align-#{$align}{
+    text-align: $align;
+  }
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.pointer-default{
+  @extend .pointer;
+  &:hover{
+    color: $blue;
+  }
+}
+
+.pointer-danger{
+  @extend .pointer;
+  &:hover{
+    color: $danger;
+  }
+}
+
+.pointer-underline{
+  @extend .pointer-default;
+  &:hover{
+    text-decoration: underline;
+  }
+}
+
+.pointer-scale{
+  @extend .pointer;
+  transition:$linear;
+  &:hover{
+    transform: scale(1.1);
+  }
+}
+
+.pointer-shadow{
+  @extend .pointer;
+  transition: $linear;
+  &:hover{
+    box-shadow: $shadow;
+  }
+}
+
+.text-ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@for $i from 2 through 3 {
+  .text-ellipsis-#{$i}{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp:$i;
+    -webkit-box-orient: vertical;
+  }
+}
+
+@for $i from 1 through 4 {
+  .text-indent-#{$i} {
+    text-indent: 1em*$i;
+  }
+}
+
+.no-select{
+  user-select: none;
+}

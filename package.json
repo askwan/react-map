@@ -3,14 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^3.15.2",
+    "axios": "^0.18.0",
+    "mapbox-gl": "^0.53.1",
     "react": "^16.8.5",
+    "react-dnd": "^7.4.3",
+    "react-dnd-html5-backend": "^7.4.0",
     "react-dom": "^16.8.5",
     "react-scripts": "2.1.8"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "set PORT=3009 && react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -21,5 +26,11 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "babel-plugin-import": "^1.11.0",
+    "customize-cra": "^0.2.12",
+    "node-sass": "^4.11.0",
+    "react-app-rewired": "^2.1.1"
+  }
 }

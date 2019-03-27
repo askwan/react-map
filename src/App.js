@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import logo from './logo.svg';
+
+import './assets/App.scss';
+import './assets/public/index.scss';
+import Map from './script/map'
+import LeftTab from './components/LeftTab';
+import PageHeader from './components/PageHeader';
+
+let map;
+
+const getMap = ()=>{
+  return map;
+}
 
 class App extends Component {
+  componentDidMount(){
+    
+    map = new Map(document.getElementById('map'))
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="App fill">
+        <PageHeader />
+        <LeftTab getMap={getMap} map={map} />
+        <div id="map"></div>
       </div>
     );
   }
