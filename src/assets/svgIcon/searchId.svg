@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" focuable = 'false' viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+  <path d="M14.27,7H10.5V17h3.76a3.26,3.26,0,0,0,3.55-3.19V10.21C17.81,8.07,16.09,7,14.27,7Zm1.53,6.4A1.71,1.71,0,0,1,14,15.22h-1.5V8.79H14a1.69,1.69,0,0,1,1.83,1.79v2.83Z"></path>
+  <polygon points="8.19 7.02 8.19 16.97 6.21 16.97 6.21 7.02 8.19 7.02 8.19 7.02"></polygon>
+  <path d="M0,0V24H24V0H0ZM22.22,22.22H1.78V1.78H22.22V22.22Z"></path>
+</svg>

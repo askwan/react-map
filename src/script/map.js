@@ -11,7 +11,8 @@ class Map {
       container:container,
       style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
       center: [-74.50, 40], // starting position [lng, lat]
-      zoom: 9 // starting zoom
+      zoom: 9, // starting zoom
+      hash:true
     })
   }
 }

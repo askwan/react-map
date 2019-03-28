@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon } from 'antd';
+import { Avatar } from 'antd';
 
 export class Login extends Component {
   feedBack(){
@@ -15,7 +15,8 @@ export class Login extends Component {
     return (
       <div className="page-login flex-between pd-left-small pd-right-small font-white font-16">
         <div className="flex-center pointer" onClick={this.login.bind(this)}>
-          <Icon type="login" />
+          {/* <Icon type="login" /> */}
+          <Avatar icon="user" />
           <span className="mg-left-mini">登陆</span>
         </div>
         <div className="flex-center">
