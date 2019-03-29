@@ -1,11 +1,12 @@
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+
 import React, { Component } from 'react'
-import { Input, Modal, Radio, Slider, Icon, Checkbox, Calendar } from 'antd';
-// import RadioGroup from 'antd/lib/radio/group';
-// import CheckboxGroup from 'antd/lib/checkbox/Group';
-// console.log(Radio.Group);
+import { Input, Modal, Radio, Slider, Icon, Checkbox, Calendar, Button } from 'antd';
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 
+moment.locale('zh-cn');
 
 const radioStyle = {
   display:'block',
@@ -34,13 +35,13 @@ const formLists = [{
 },{
   type:'date',
   ui:'calendar',
-  value:'',
+  value:'1/1/2001',
   title:'开始时间',
   options:[]
 },{
   type:'date',
   ui:'calendar',
-  value:'',
+  value:'2/8/2019',
   title:'结束时间',
   options:[]
 },{
@@ -86,7 +87,7 @@ const ModalElement = (props)=>{
             props.selected.ui === 'checkbox' && <CheckboxGroup className="check-box" options={props.selected.options.map(el=>el.label)} value={props.selected.value} onChange={(value)=>props.changecheckbox(value,props.selected)} />
           }
           {
-            props.selected.ui === 'calendar' && <Calendar fullscreen={false}  />
+            props.selected.ui === 'calendar' && <Calendar value={moment(props.selected.value)} fullscreen={false} onChange={(value)=>props.changecheckbox(value,props.selected)}  />
           }
         </Modal>)
 
@@ -155,19 +156,22 @@ export default class Filters extends Component {
     })
   }
   changecheckbox(value,item){
-    item.value = value;
+    console.log(value,'value')
+    console.log(value.format('M/D/YYYY'),'moment')
+    item.value = value.format('M/D/YYYY');
     this.setState({
       formLists:this.state.formLists
     })
   }
   
   render() {
-    console.log('render')
     return (
       <div className="header-filter page-tab pd-big">
         <FormListElement formLists = {this.state.formLists} selectOperate = {this.selectOperate.bind(this)} changeValue={this.changeValue.bind(this)} selected={this.state.selectedForm} />
         <ModalElement visible={this.state.visible} selected={this.state.selectedForm} okButton={this.okButton.bind(this)} calcelButton={this.calcelButton.bind(this)} changeRadio={this.changeRadio.bind(this)} changecheckbox={this.changecheckbox.bind(this)} />
-        
+        <div className="filters-footer flex-center">
+          <Button shape="round">提交</Button>
+        </div>
       </div>
     )
   }

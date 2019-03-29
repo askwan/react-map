@@ -14,15 +14,23 @@ const getMap = ()=>{
 }
 
 class App extends Component {
+  state={
+    showLeft:false
+  }
   componentDidMount(){
-    
     map = new Map(document.getElementById('map'))
+  }
+  toggleLeft(bool){
+    console.log(bool,'bool')
+    this.setState({
+      showLeft: bool
+    })
   }
   render() {
     return (
       <div className="App fill">
         <PageHeader />
-        <LeftTab getMap={getMap} map={map} />
+        <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} />
         <div id="map"></div>
       </div>
     );
