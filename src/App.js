@@ -20,7 +20,7 @@ class App extends Component {
     mapReady:false
   }
   componentDidMount(){
-    console.log(1111)
+    console.log('地图开始new')
     map = new Map(document.getElementById('map'),(map)=>{
       console.log('ready',map);
       this.setState({
@@ -33,10 +33,11 @@ class App extends Component {
       showLeft: bool
     })
   }
+  
   render() {
     return (
       <div className="App fill">
-        <PageHeader />
+        <PageHeader getMap={getMap} />
         <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} />
         {this.state.mapReady && <MapControl getMap={getMap} /> }
         <div id="map"></div>

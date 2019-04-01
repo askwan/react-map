@@ -9,7 +9,7 @@ import Help from './Help';
 const Tab = props => {
   let str = props.selected;
   if(str === 'area'){
-    return <Area />
+    return <Area getMap={props.getMap} />
   }else if(str === 'filter'){
     return <Filters />
   }
@@ -37,7 +37,7 @@ export default class PageHeader extends Component {
         <Login showHelp = {this.state.showHelp} toggleHelp={this.toggleHelp.bind(this)} />
         <Search />
         <Tabs selected={this.state.selected} onselect={this.changeSelect.bind(this)} />
-        <Tab selected={this.state.selected} />
+        <Tab selected={this.state.selected} getMap={this.props.getMap} />
         <Help showHelp={this.state.showHelp} toggleHelp={this.toggleHelp.bind(this)} />
       </div>
     )
