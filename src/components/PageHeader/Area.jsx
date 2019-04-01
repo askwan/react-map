@@ -15,37 +15,37 @@ const operateList = [{
 {
   icon: reatIcon,
   type: 'reatIcon',
-   des: '绘制一个长方形'
+  des: '绘制一个长方形'
 },
 {
-  icon: earthIcon, 
-  type: 'earthIcon', 
+  icon: earthIcon,
+  type: 'earthIcon',
   des: '创建一个点'
 },
 {
   icon: uploadIcon,
   type: 'uploadIcon',
-  des:'上传数据',
-},{
+  des: '上传数据',
+}, {
   icon: importIcon,
   type: 'importIcon',
-  des:'导入临时数据'
-},{
-  icon:searchIdIcon,
-  type:'searchIdIcon',
-  des:'按照id查找一个位置'
-},{
-  icon:deleteIcon,
-  type:'deleteIcon',
-  des:'删除数据'
+  des: '导入临时数据'
+}, {
+  icon: searchIdIcon,
+  type: 'searchIdIcon',
+  des: '按照id查找一个位置'
+}, {
+  icon: deleteIcon,
+  type: 'deleteIcon',
+  des: '删除数据'
 }];
 
-const OperateElement = (props)=>{
+const OperateElement = (props) => {
   let selected = props.selected;
   let className = "no-select radius-2 flex-align pointer pd-small font-18 font-black area-el";
   return (
-    operateList.map((item,i)=>(
-      <div key={i} className={item.icon === selected ? className + ' active' : className} onClick={()=>props.selectOperate(item)}>
+    operateList.map((item, i) => (
+      <div key={i} className={item.icon === selected ? className + ' active' : className} onClick={() => props.selectOperate(item)}>
         <img className="mg-right-small" width="18" height="18" src={item.icon} alt="" />
         <span>{item.des}</span>
       </div>
@@ -55,13 +55,21 @@ const OperateElement = (props)=>{
 
 export default class Area extends Component {
   state = {
-    selected:''
+    selected: ''
   }
-  selectOperate(item){
-    console.log(item.type)
+  selectOperate(item) {
     this.setState({
-      selected:item.icon
+      selected: item.icon
     })
+    console.log(this.props)
+    console.log(this.props.getMap())
+    if (item.type === 'ploygon') {
+      this.props.getMap().drawPloygon();
+    } else if (item.type === 'reatIcon') {
+      this.props.getMap().drawReatIcon();
+    } else if (item.type === 'earthIcon') {
+      this.props.getMap().drawEarthIcon();
+    } else { }
   }
   render() {
     return (
