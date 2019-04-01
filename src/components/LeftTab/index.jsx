@@ -15,7 +15,7 @@ export default class LeftTab extends Component {
   }
 //3123123
 //3123123
-//3123123
+//3123123 yeyeyeye
  
   toggleLeft(){
     this.props.toggleLeft(!this.props.showLeft);
