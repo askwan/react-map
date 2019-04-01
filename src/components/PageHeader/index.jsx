@@ -4,6 +4,7 @@ import Search from './Search';
 import Tabs from './Tabs';
 import Area from './Area';
 import Filters from './Filters'
+import Help from './Help';
 
 const Tab = props => {
   let str = props.selected;
@@ -18,19 +19,26 @@ const Tab = props => {
 export default class PageHeader extends Component {
   state={
     selected:'',
+    showHelp:false
   }
   changeSelect(item){
     this.setState({
       selected:item
     })
   }
+  toggleHelp(bool){
+    this.setState({
+      showHelp:bool
+    })
+  }
   render() {
     return (
       <div className="page-header">
-        <Login />
+        <Login showHelp = {this.state.showHelp} toggleHelp={this.toggleHelp.bind(this)} />
         <Search />
         <Tabs selected={this.state.selected} onselect={this.changeSelect.bind(this)} />
         <Tab selected={this.state.selected} />
+        <Help showHelp={this.state.showHelp} toggleHelp={this.toggleHelp.bind(this)} />
       </div>
     )
   }

@@ -3,10 +3,10 @@ import { Avatar } from 'antd';
 
 export class Login extends Component {
   feedBack(){
-    console.log('feedBack')
+
   }
   getHelp(){
-    console.log('help')
+    this.props.toggleHelp(true);
   }
   login(){
     console.log(this,'login')
@@ -20,9 +20,9 @@ export class Login extends Component {
           <span className="mg-left-mini">登陆</span>
         </div>
         <div className="flex-center">
-          <span className="pointer" onClick={this.feedBack}>反馈</span>
+          <span className="pointer" onClick={this.feedBack.bind(this)}>反馈</span>
           <span className="mg-left-right-mini">|</span>
-          <span className="pointer" onClick={this.getHelp}>帮助</span>
+          <span className="pointer" onClick={this.getHelp.bind(this)}>帮助</span>
         </div>
       </div>
     )

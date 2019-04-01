@@ -12,7 +12,7 @@ const radioStyle = {
   display:'block',
   height:'30px',
   lineHeight:'30px'
-}
+};
 
 const formLists = [{
   type:'string',
@@ -58,7 +58,7 @@ const formLists = [{
   title:'高度角',
   step:1,
   domain:[0,90]
-}]
+}];
 
 
 const FormListElement = (props)=>{
@@ -90,18 +90,6 @@ const ModalElement = (props)=>{
             props.selected.ui === 'calendar' && <Calendar value={moment(props.selected.value)} fullscreen={false} onChange={(value)=>props.changecheckbox(value,props.selected)}  />
           }
         </Modal>)
-
-  // return (
-  //   <div>
-  //     {
-  //       props.selected.ui === 'radio' && 
-  //         <RadioGroup onChange={this.onChange.bind(this)} value={this.state.value}>
-  //           <Radio style={radioStyle} value='Core Imagery' >Core Imagery</Radio>
-  //           <Radio style={radioStyle} value='In Track Stereo' >In Track Stereo</Radio>
-  //         </RadioGroup>
-  //     }
-  //   </div>
-  // )
 }
 
 export default class Filters extends Component {
@@ -140,7 +128,6 @@ export default class Filters extends Component {
     this.setState({
       value:''
     })
-    console.log('cancle',this)
     this.toggleModal(false);
   }
   changeValue(value,item,b,c){
