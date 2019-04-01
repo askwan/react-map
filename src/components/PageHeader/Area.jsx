@@ -9,27 +9,34 @@ import deleteIcon from '@/assets/svgIcon/delete.svg'
 
 const operateList = [{
   icon: ploygon,
-  des: '绘制一个多边形'
+  type: 'ploygon',
+  des: '绘制一个多边形',
 },
 {
   icon: reatIcon,
+  type: 'reatIcon',
    des: '绘制一个长方形'
 },
 {
   icon: earthIcon, 
+  type: 'earthIcon', 
   des: '创建一个点'
 },
 {
   icon: uploadIcon,
+  type: 'uploadIcon',
   des:'上传数据',
 },{
   icon: importIcon,
+  type: 'importIcon',
   des:'导入临时数据'
 },{
   icon:searchIdIcon,
+  type:'searchIdIcon',
   des:'按照id查找一个位置'
 },{
   icon:deleteIcon,
+  type:'deleteIcon',
   des:'删除数据'
 }];
 
@@ -51,6 +58,7 @@ export default class Area extends Component {
     selected:''
   }
   selectOperate(item){
+    console.log(item.type)
     this.setState({
       selected:item.icon
     })
