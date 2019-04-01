@@ -19,15 +19,18 @@ export default class LeftTab extends Component {
   toggleLeft(){
     this.props.toggleLeft(!this.props.showLeft);
   }
+  save(){
+    console.log('save');
+  }
   render() {
     let className = 'left-box';
-    className = this.props.showLeft ? className : className+' left-hidden'
+    className = this.props.showLeft ? className : className+' left-hidden';
     return (
       <div className={className}>
         <div className="left-content">
           <ContentTitle />
           <ContentCollapse />
-          <ContentFooter />
+          <ContentFooter save={this.save.bind(this)} />
         </div>
         <div className="left-bar flex-center" onClick={this.toggleLeft.bind(this)}>
           <img src={LeftIcon} width="24" height="24" alt=""/>

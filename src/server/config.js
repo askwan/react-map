@@ -1,0 +1,6 @@
+const serverUrl = '';
+
+
+export {
+  serverUrl
+}

@@ -12,7 +12,6 @@ const TitleElement = (props) =>{
   const click = event=>{
     event.preventDefault();
     event.stopPropagation();
-    console.log(event);
   }
   return (
     <div className="flex-between">
