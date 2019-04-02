@@ -10,6 +10,9 @@ class Server {
     this.url = option.url || serverUrl;
     this.imageServer = new ImageServer({url:this.url});
   }
+  getUrl(){
+    return serverUrl
+  }
 }
 
 export default new Server()

@@ -2,8 +2,8 @@ import React from 'react';
 import {DragDropContext,DragSource,DropTarget} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
-import { Table } from 'antd';
-import AddIcon from '@/assets/svgIcon/add.svg'
+import { Table, Row, Col } from 'antd';
+// import AddIcon from '@/assets/svgIcon/add.svg'
 
 let dragingIndex = -1;
 
@@ -83,35 +83,78 @@ const DragableBodyRow = DropTarget(
 
 const columns = [{
   title:'Source',
-  dataIndex:'source',
-  key:'source',
+  dataIndex:'SensorID',
+  key:'SensorID',
   className:'column column-1'
-},{
-  title:'Collected',
-  dataIndex:'date',
-  key:'date',
-  className:'column column-2'
-},{
+},
+// {
+//   title:'Collected',
+//   dataIndex:'date',
+//   key:'date',
+//   className:'column column-2'
+// },
+{
   title:'Area Clouds',
-  dataIndex:'cloud',
-  key:'cloud',
+  dataIndex:'cloudPercent',
+  key:'cloudPercent',
   className:'column column-3'
-},{
-  title:'Area Off Nadir',
-  dataIndex:'area',
-  key:'area',
-  className:'column column-4'
-},{
-  title:'',
-  dataIndex:'add',
-  key:'add',
-  className:'column column-5',
-  render:(text,record)=>(
-    <img width="17" height="17" src={AddIcon} alt="" />
+},
+// {
+//   title:'Area Off Nadir',
+//   dataIndex:'area',
+//   key:'area',
+//   className:'column column-4'
+// },
+// {
+//   title:'',
+//   dataIndex:'add',
+//   key:'add',
+//   className:'column column-5',
+//   render:(text,record)=>(
+//     <img width="17" height="17" src={AddIcon} alt="" />
+//   )
+// }
+];
+
+const detailRow = (record, index, indent, expanded)=>{
+  console.log(record,index,indent,expanded);
+  return (
+    <div>
+      <Row>
+        <Col span={12}>
+          <span className="font-black">SensorID：</span>
+        </Col>
+        <Col span={12}>
+          <span>{record.SensorID}</span>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <span className="font-black">DriverName：</span>
+        </Col>
+        <Col span={12}>
+          <span>{record.DriverName}</span>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <span className="font-black">RollSatelliteAngle：</span>
+        </Col>
+        <Col span={12}>
+          <span>{record.RollSatelliteAngle}</span>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <span className="font-black">rollSatelliteAngle：</span>
+        </Col>
+        <Col span={12}>
+          <span>{record.rollSatelliteAngle}</span>
+        </Col>
+      </Row>
+    </div>
   )
-}];
-
-
+}
 
 
 class DragSortingTable extends React.Component {
@@ -165,19 +208,35 @@ class DragSortingTable extends React.Component {
       }),
     );
   }
+  selectRow(a,b){
+    // console.log('change',a,b,c);
+    console.log(this.props)
+    let map = this.props.getMap();
+    map.changeSource(b);
+  }
   render(){
+    let rowSelection = {
+      onChange:this.selectRow.bind(this)
+    }
+    let list = this.props.list.map(el=>{
+      el.CloudPercent+='%';
+      return el
+    })
     return (
       <Table
         columns={columns}
         size='small'
-        rowSelection = {{}}
-        dataSource={this.state.data}
+        rowSelection = {rowSelection}
+        dataSource={list}
         components = {this.components}
         pagination={false}
+        rowKey={(item)=>item.mt_uuid}
         onRow = {(record,index)=>({
           index,
           moveRow:this.moveRow,
         })}
+        expandedRowRender={detailRow}
+        // expandIcon={()=><img className="pointer" width="17" height="17" src={AddIcon} alt="" />}
       />
     )
   }

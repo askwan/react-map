@@ -7,7 +7,7 @@ import Map from './script/map'
 import LeftTab from './components/LeftTab';
 import PageHeader from './components/PageHeader';
 import MapControl from './components/MapControl';
-
+import server from '@/server';
 let map;
 
 const getMap = ()=>{
@@ -21,8 +21,8 @@ class App extends Component {
     selected:''
   }
   componentDidMount(){
-    console.log('地图开始new')
     map = new Map(document.getElementById('map'),(map)=>{
+      map.setSourceUrl(server.getUrl());
       console.log('ready',map);
       this.setState({
         mapReady:true

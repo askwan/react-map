@@ -38,14 +38,18 @@ export default class ContentCollapse extends Component {
       lists:this.state.lists
     })
   }
+  changePanel(index){
+    console.log(index,'change');
+    console.log(this.props.metalist[index]);
+  }
   render() {
     return (
       <div className="content-collapse">
-        <Collapse bordered={false} accordion>
+        <Collapse bordered={false} accordion onChange={this.changePanel.bind(this)}>
           {
             this.props.metalist.map((item,index)=>(
               <Panel showArrow={false} header={<TitleElement item={item} changeTitle={this.changeTitle.bind(this)} />} key={index}>
-                <DragTable />
+                <DragTable list={item.datas} getMap={this.props.getMap} />
               </Panel>
             ))
           }

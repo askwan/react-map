@@ -37,7 +37,7 @@ export default class LeftTab extends Component {
       <div className={className}>
         <div className="left-content">
           <ContentTitle />
-          <ContentCollapse metalist = {this.state.metadatalist} />
+          <ContentCollapse metalist = {this.state.metadatalist} getMap={this.props.getMap} />
           <ContentFooter save={this.save.bind(this)} />
         </div>
         <div className="left-bar flex-center" onClick={this.toggleLeft.bind(this)}>

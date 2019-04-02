@@ -8,7 +8,7 @@ class ImageServer extends Base {
   }
   queryByArea(option={}){
     return new Promise((resolve,reject)=>{
-      option.geoWkt = 'POLYGON((110.334 44.3182,110.766 44.2411,110.654 43.9166,110.224 43.9934,110.334 44.3182))';
+      option.geoWkt = 'POLYGON((110.334 44.3182,111.766 45.2411,111.654 45.9166,110.224 43.9934,110.334 44.3182))';
       this.get('/query',option).then(res=>{
         if(res.status===200){
           
