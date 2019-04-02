@@ -1,15 +1,18 @@
-import Evented from '../utils/Evented'
+// import Evented from '../utils/Evented'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import MapEventFn from './mapEventFn/MapEventFn'
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
+
 let map;
-class Map extends Evented {
+let mapEventFn;
+class Map {
   constructor(container, callback) {
-    super();
+    // super();
     this.initMap(container, callback)
-    
-    this.clickArr=[]
-    this.mouseMoveArr=[]
+
+    this.drawMap = false
+
   }
   initMap(container, callback) {
     map = new mapboxgl.Map({
@@ -22,15 +25,13 @@ class Map extends Evented {
       attributionControl: true,
       pitch: 0
     });
-    this.initEvent(map);
-    if (typeof callback === 'function') callback(this);
+    map.on("load", () => {
+      mapEventFn = new MapEventFn(map)
+      if (typeof callback === 'function') callback(this);
+    });
   }
-  initEvent(map) {
-    map.on('mousemove', (event) => {
-      this.fire('mousemove', {
-        lngLat: event.lngLat
-      })
-    })
+  getMapEventFn(){
+    return mapEventFn
   }
   zoomTo(zoom) {
     map.zoomTo(zoom);
@@ -40,8 +41,9 @@ class Map extends Evented {
   }
 
   drawPloygon() {
-    this.mouseMove(true)
-    this.mouseClick(true)
+    this.drawMap = true
+    mapEventFn.mouseClick(true)
+
   }
   drawReatIcon() {
 
@@ -51,31 +53,8 @@ class Map extends Evented {
 
     console.log(333)
   }
-  mouseMove(open) {
-    let move=(e)=> {
-      this.mouseMoveArr.splice(this.mouseMoveArr.length-1,1,e.lngLat)
-      // console.log(e,this.mouseMoveArr)
 
-    }
-    if (open) {
-      map.on('mousemove', move);
-    } else {
-      map.off('mousemove', move);
-    }
-  }
-  mouseClick(open) {
-    let click=(e)=> {
-      this.clickArr.push(e.lngLat)
-      console.log(e,this.clickArr)
 
-    }
-    if (open) {
-      map.on('click', click);
-    } else {
-      map.off('click', click);
-      this.clickArr=[]
-    }
-  }
 }
 
 export default Map
