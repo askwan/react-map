@@ -17,7 +17,8 @@ const getMap = ()=>{
 class App extends Component {
   state={
     showLeft:false,
-    mapReady:false
+    mapReady:false,
+    selected:''
   }
   componentDidMount(){
     console.log('地图开始new')
@@ -33,11 +34,16 @@ class App extends Component {
       showLeft: bool
     })
   }
-  
+  changeSelect(item){
+    console.log('item',item)
+    this.setState({
+      selected:item
+    })
+  }
   render() {
     return (
       <div className="App fill">
-        <PageHeader getMap={getMap} />
+        <PageHeader getMap={getMap} selected={this.state.selected} changeSelect={this.changeSelect.bind(this)} />
         <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} />
         {this.state.mapReady && <MapControl getMap={getMap} /> }
         <div id="map"></div>

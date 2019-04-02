@@ -21,11 +21,11 @@ export default class PageHeader extends Component {
     selected:'',
     showHelp:false
   }
-  changeSelect(item){
-    this.setState({
-      selected:item
-    })
-  }
+  // changeSelect(item){
+  //   this.setState({
+  //     selected:item
+  //   })
+  // }
   toggleHelp(bool){
     this.setState({
       showHelp:bool
@@ -36,8 +36,8 @@ export default class PageHeader extends Component {
       <div className="page-header">
         <Login showHelp = {this.state.showHelp} toggleHelp={this.toggleHelp.bind(this)} />
         <Search />
-        <Tabs selected={this.state.selected} onselect={this.changeSelect.bind(this)} />
-        <Tab selected={this.state.selected} getMap={this.props.getMap} />
+        <Tabs selected={this.props.selected} onselect={this.props.changeSelect} />
+        <Tab selected={this.props.selected} getMap={this.props.getMap} />
         <Help showHelp={this.state.showHelp} toggleHelp={this.toggleHelp.bind(this)} />
       </div>
     )
