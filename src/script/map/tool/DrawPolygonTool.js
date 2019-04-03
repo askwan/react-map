@@ -36,7 +36,7 @@ class DrawPolygonTool extends tool {
         isInPoint = true
         let first = this.firstLnglat
 
-        if (this.lnglatArr.length > 0 && f.properties.id === first.time) {
+        if (this.lnglatArr.length > 2 && f.properties.id === first.time) {
           isEnd = true
           first.time = String(new Date().getTime())
           this.lnglatArr.push(first)

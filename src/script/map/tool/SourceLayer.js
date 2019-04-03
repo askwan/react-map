@@ -42,7 +42,7 @@ class SourceLayer {
       },
       "filter": ["==", "$type", "Polygon"]
     });
-    
+
     this.map.addLayer({
       "id": 'source-toolend-line',
       "type": 'line',
@@ -87,7 +87,8 @@ class SourceLayer {
       "source": "source-tooling",
       "paint": {
         "circle-radius": 8,
-        "circle-color": "#F56C6C"
+        "circle-color": "#F56C6C",
+        "circle-opacity": 1
       },
       "filter": ["==", "$type", "Point"],
     });

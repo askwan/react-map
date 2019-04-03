@@ -1,5 +1,4 @@
 import tool from './tool'
-// import * as turf from '@turf'
 import * as turf from '@turf/turf'
 class DrawRectangleTool extends tool {
   constructor(map) {
