@@ -12,15 +12,16 @@ class DrawPolygonTool extends tool {
     this.mouseUpLnglat = []
     this.mouseMoveLngLat = null
   }
+
   getName() {
     return "ploygon"
   }
   mouseMove(event) {
     this.mouseMoveLngLat = event.lngLat
-    // this.createIng(this.mouseUpLnglat)
+    this.createIng(this.mouseUpLnglat)
 
   }
-  mouseUp(event) {
+  mouseclick(event) {
     let features = this.map.queryRenderedFeatures(event.point, {
       layers: ['source-tooling-point']
     });

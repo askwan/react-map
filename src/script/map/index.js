@@ -24,28 +24,28 @@ class Map extends Evented {
   initMap(container, callback) {
     map = new mapboxgl.Map({
       container: container,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      // style:{
-      //   version: 8,
-      //   sources:{
-      //     'raster-tiles': {
-      //       type: 'raster',
-      //       tiles: [
-      //         'http://www.google.cn/maps/vt?lyrs=s@781&gl=cn&x={x}&y={y}&z={z}'
-      //       ],
-      //       tileSize: 256,
-      //       minzoom: 0,
-      //       maxzoom: 22
-      //     },
-      //   },
-      //   layers:[{
-      //     id: 'raster-tiles',
-      //     type: 'raster',
-      //     source: 'raster-tiles',
-      //     minzoom: 0,
-      //     maxzoom: 22
-      //   }]
-      // },
+      // style: 'mapbox://styles/mapbox/streets-v11',
+      style: {
+        version: 8,
+        sources: {
+          'raster-tiles': {
+            type: 'raster',
+            tiles: [
+              'http://www.google.cn/maps/vt?lyrs=s@781&gl=cn&x={x}&y={y}&z={z}'
+            ],
+            tileSize: 256,
+            minzoom: 0,
+            maxzoom: 22
+          },
+        },
+        layers: [{
+          id: 'raster-tiles',
+          type: 'raster',
+          source: 'raster-tiles',
+          minzoom: 0,
+          maxzoom: 22
+        }]
+      },
       center: [110.766, 44.2411], // starting position [lng, lat]
       zoom: 15, // starting zoom
       hash: true,

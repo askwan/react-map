@@ -18,16 +18,17 @@ class DrawRectangleTool extends tool {
   }
   mouseMove(event) {
     this.mouseMoveLngLat = event.lngLat
+    this.createIng()
 
   }
-  mouseUp(event) {
-if(this.mouseMoveLngLatOne){
-  this.mouseMoveLngLatTwo = event.lngLat
-}else{
-  this.mouseMoveLngLatOne = event.lngLat
-}
-    
-    this.createIng()
+  mouseclick(event) {
+    if (this.mouseMoveLngLatOne) {
+      this.mouseMoveLngLatTwo = event.lngLat
+      this.createEnd()
+    } else {
+      this.mouseMoveLngLatOne = event.lngLat
+      this.createIng()
+    }
 
   }
   createIng() {
@@ -35,20 +36,23 @@ if(this.mouseMoveLngLatOne){
       "type": "FeatureCollection",
       "features": []
     }
-    // geojsonData.features = this.createGeometry(mouseUpLnglat);
-    // this.map.getSource('source-tooling').setData(geojsonData);
+    if(this.mouseMoveLngLatOne&&this.mouseMoveLngLat){
+   geojsonData.features = this.createGeometry(this.mouseMoveLngLatOne,this.mouseMoveLngLat);
+    }
+    this.map.getSource('source-tooling').setData(geojsonData);
   }
-  createEnd(mouseUpLnglat) {
+  createEnd() {
 
-    let f = this.createGeometry(mouseUpLnglat)
+    let f = this.createGeometry(this.mouseMoveLngLatOne,this.mouseMoveLngLatTwo)
     for (let i = 0; i < f.length; i++) {
       this.geojsonData.features.push(f[i]);
     }
     this.map.getSource('source-toolend').setData(this.geojsonData);
-    this.mouseUpLnglat = []
-
+    this.mouseMoveLngLatOne = null
+    this.mouseMoveLngLatTwo = null
+    this.createIng()
   }
-  createGeometry(mouseUpLnglat) {
+  createGeometry(one,two) {
     let featuresArr = []
     let ploygonArr = []
 
@@ -66,35 +70,26 @@ if(this.mouseMoveLngLatOne){
         "coordinates": []
       }
     };
-    for (let i = 0; i < mouseUpLnglat.length; i++) {
-      let lnglat = mouseUpLnglat[i].lnglat
-      let time = mouseUpLnglat[i].time
-      let arr = [lnglat.lng, lnglat.lat]
+    let minLng=one.lng>two.lng?two.lng:one.lng
+    let minLat=one.lat>two.lat?two.lat:one.lat
+    let maxLng=one.lng<=two.lng?two.lng:one.lng
+    let maxLat=one.lat<=two.lat?two.lat:one.lat
+    linestring.geometry.coordinates.push([minLng, minLat])
+    linestring.geometry.coordinates.push([minLng, maxLat])
+    linestring.geometry.coordinates.push([maxLng, maxLat])
+    linestring.geometry.coordinates.push([maxLng, minLat])
+    linestring.geometry.coordinates.push([minLng, minLat])
 
-      let point = {
-        "type": "Feature",
-        "geometry": {
-          "type": "Point",
-          "coordinates": arr
-        },
-        "properties": {
-          "id": time
-        }
-      }
-      featuresArr.push(point)
+    ploygonArr.push([minLng, minLat])
+    ploygonArr.push([minLng, maxLat])
+    ploygonArr.push([maxLng, maxLat])
+    ploygonArr.push([maxLng, minLat])
+  
+    ploygon.geometry.coordinates = [ploygonArr]
 
-      linestring.geometry.coordinates.push(arr)
-      ploygonArr.push(arr)
-    }
     featuresArr.push(linestring)
-    if (ploygonArr.length > 2) {
-      if (ploygonArr[0][0] !== ploygonArr[ploygonArr.length - 1][0] && ploygonArr[0][1] !== ploygonArr[ploygonArr.length - 1][1]) {
-        ploygonArr.push(ploygonArr[0])
-      }
-      ploygon.geometry.coordinates = [ploygonArr]
-      featuresArr.push(ploygon)
-
-    }
+    featuresArr.push(ploygon)
+    
     return featuresArr
 
   }
