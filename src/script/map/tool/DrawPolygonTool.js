@@ -27,7 +27,6 @@ class DrawPolygonTool extends tool {
     if (!this.firstLnglat) {
       this.firstLnglat = lngLat
     }
-
     let features = this.mapboxMap.queryRenderedFeatures(event.point, {
       layers: ['source-tooling-point']
     });
@@ -37,7 +36,7 @@ class DrawPolygonTool extends tool {
         isInPoint = true
         let first = this.firstLnglat
 
-        if (this.lnglatArr.length > 0 && f.properties.id === first.time) {
+        if (this.lnglatArr.length > 2 && f.properties.id === first.time) {
           isEnd = true
           first.time = String(new Date().getTime())
           this.lnglatArr.push(first)
@@ -48,7 +47,6 @@ class DrawPolygonTool extends tool {
       if (isEnd) {
         this.setEndData(this.createEnd(this.lnglatArr, this.moveLnglat, this.firstLnglat, this.mapjs.source.geojsonData))
         this.mapjs.drawEndFn(this.polygonData)
-
       }
     } else {
       this.lnglatArr.push(lngLat)
@@ -73,17 +71,17 @@ class DrawPolygonTool extends tool {
       "type": "FeatureCollection",
       "features": []
     }
-    geojsonData.features = this.createGeometry(lnglatArr, moveLnglat, firstLnglat);
+    geojsonData.features = this.createGeometry(lnglatArr, moveLnglat, firstLnglat, true);
     return geojsonData
   }
   createEnd(lnglatArr, moveLnglat, firstLnglat, geojsonData) {
-    let f = this.createGeometry(lnglatArr, moveLnglat, firstLnglat)
+    let f = this.createGeometry(lnglatArr, moveLnglat, firstLnglat, false)
     for (let i = 0; i < f.length; i++) {
       geojsonData.features.push(f[i]);
     }
     return geojsonData
   }
-  createGeometry(lnglatArr, moveLnglat, firstLnglat) {
+  createGeometry(lnglatArr, moveLnglat, firstLnglat, show) {
     let featuresArr = []
     let ploygonArr = []
 
@@ -116,11 +114,13 @@ class DrawPolygonTool extends tool {
           "id": time
         }
       }
-      featuresArr.push(point)
+      if (show) {
+        featuresArr.push(point)
+      }
       linestring.geometry.coordinates.push(arr)
       ploygonArr.push(arr)
     }
-    if (lnglatArr.length > 0) {
+    if (show && lnglatArr.length > 0) {
       let arr = [moveLnglat.lng, moveLnglat.lat]
       linestring.geometry.coordinates.push(arr)
       ploygonArr.push(arr)
@@ -134,8 +134,10 @@ class DrawPolygonTool extends tool {
       }
       ploygon.geometry.coordinates = [ploygonArr]
       this.polygonData = ploygon.geometry
+      if (show) {
+        featuresArr.push(ploygon)
 
-      featuresArr.push(ploygon)
+      }
     }
     return featuresArr
 
