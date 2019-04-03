@@ -1,22 +1,24 @@
 
-
 class Tool {
+  constructor(){
+    this.fnCollection = {};
+  }
   mouseDown(event) {}
   // mouseMove(event) {}
   // mouseUp(event) {}
   mouseDBclick(event) {}
   active() {
     console.log('bb')
-
-    this.map.on('mousedown', this.mouseDown.bind(this))
-    this.map.on('mousemove', this.mouseMove.bind(this))
-    this.map.on('mouseup', this.mouseUp.bind(this))
+    this.fnCollection.mouseMove = this.mouseMove.bind(this);
+    this.map.on('mousedown', this.mouseDown)
+    this.map.on('mousemove', this.fnCollection.mouseMove)
+    this.map.on('mouseup', this.mouseUp)
   }
   unactive() {
     console.log(this.map,'aaaaaa')
-    this.map.off('mousedown', this.mouseDown.bind(this))
-    this.map.off('mousemove', this.mouseMove.bind(this))
-    this.map.off('mouseup', this.mouseUp.bind(this))
+    this.map.off('mousedown', this.mouseDown)
+    this.map.off('mousemove', this.fnCollection.mouseMove)
+    this.map.off('mouseup', this.mouseUp)
   }
 }
 
