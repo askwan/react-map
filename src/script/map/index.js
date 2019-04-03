@@ -59,6 +59,7 @@ class Map extends Evented {
           lngLat: event.lngLat
         })
       }
+      console.log(6666,map)
       map.on('mousemove', lngLatFn)
       // map.off('mousemove',lngLatFn)
       let source = new SourceLayer(map)
@@ -73,35 +74,35 @@ class Map extends Evented {
 
     });
   }
-  setSourceUrl(url){
+  setSourceUrl(url) {
     this.sourceUrl = url;
   }
-  changeSource(metas){
-    if(metas.length===0) {
+  changeSource(metas) {
+    if (metas.length === 0) {
       map.removeLayer('meta-layer');
       map.removeSource('meta-layer');
       return false
     }
-    let sourceId = metas.map(el=>el.mt_thumbimg).join(',');
+    let sourceId = metas.map(el => el.mt_thumbimg).join(',');
     let url = `${this.sourceUrl}/tile/getTile?mtThumbimgs=${sourceId}&col={x}&row={y}&level={z}&bboxSR=3857`;
-    if(map.getLayer('meta-layer')){
+    if (map.getLayer('meta-layer')) {
       map.removeLayer('meta-layer');
       map.removeSource('meta-layer');
     }
     let layer = {
-      id:'meta-layer',
-      type:'raster',
-      source:{
-        type:'raster',
-        tiles:[
+      id: 'meta-layer',
+      type: 'raster',
+      source: {
+        type: 'raster',
+        tiles: [
           url
         ],
-        tileSize:256
+        tileSize: 256
       }
     }
     map.addLayer(layer);
   }
- 
+
   zoomTo(zoom) {
     map.zoomTo(zoom);
   }

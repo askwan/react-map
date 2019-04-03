@@ -43,8 +43,6 @@ class DrawPolygonTool extends tool {
       time: String(new Date().getTime())
     })
     this.createIng(this.mouseUpLnglat)
-
-
   }
   createIng(mouseUpLnglat) {
     let geojsonData = {
