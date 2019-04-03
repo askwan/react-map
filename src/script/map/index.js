@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 import SourceLayer from './tool/SourceLayer'
 import DrawPolygonTool from './tool/DrawPolygonTool'
-import DrawPointTool from './tool/DrawPointTool'
+import DrawCircleTool from './tool/DrawCircleTool'
 import DrawRectangleTool from './tool/DrawRectangleTool'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
@@ -63,8 +63,8 @@ class Map extends Evented {
       this.source.addSource()
       let polygonTool = new DrawPolygonTool(this)
       this.tool[polygonTool.getName()] = polygonTool
-      let pointTool = new DrawPointTool(this)
-      this.tool[pointTool.getName()] = pointTool
+      let circleTool = new DrawCircleTool(this)
+      this.tool[circleTool.getName()] = circleTool
       let rectangleTool = new DrawRectangleTool(this)
       this.tool[rectangleTool.getName()] = rectangleTool
       if (typeof callback === 'function') callback(this);

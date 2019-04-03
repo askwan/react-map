@@ -1,8 +1,8 @@
 import tool from './tool'
 
-class DrawPointTool extends tool {
+class DrawCircleTool extends tool {
   constructor(map) {
-    super("pointTool")
+    super("circleTool")
   
     this.mapboxMap = map.getMap()
 
@@ -17,4 +17,4 @@ class DrawPointTool extends tool {
   }
 
 }
-export default DrawPointTool
+export default DrawCircleTool

@@ -15,7 +15,7 @@ class DrawPolygonTool extends tool {
 
   mouseMove(event) {
     this.moveLnglat = event.lngLat
-    this.setStartData(this.createIng(this.lnglatArr,this.moveLnglat,this.firstLnglat))
+    this.setStartData(this.createIng(this.lnglatArr, this.moveLnglat, this.firstLnglat))
   }
   mouseclick(event) {
     let isEnd = false
@@ -46,11 +46,13 @@ class DrawPolygonTool extends tool {
     }
     if (isInPoint) {
       if (isEnd) {
-        this.setEndData(this.createEnd(this.lnglatArr,this.moveLnglat,this.firstLnglat, this.mapjs.source.geojsonData))
+        this.setEndData(this.createEnd(this.lnglatArr, this.moveLnglat, this.firstLnglat, this.mapjs.source.geojsonData))
+        this.mapjs.drawEndFn(this.polygonData)
+
       }
     } else {
       this.lnglatArr.push(lngLat)
-      this.setStartData(this.createIng(this.lnglatArr,this.moveLnglat,this.firstLnglat))
+      this.setStartData(this.createIng(this.lnglatArr, this.moveLnglat, this.firstLnglat))
     }
 
   }
@@ -60,28 +62,28 @@ class DrawPolygonTool extends tool {
   setEndData(jsonData) {
     this.mapboxMap.getSource('source-toolend').setData(jsonData);
     this.clearData()
-    this.setStartData(this.createIng(this.lnglatArr,this.moveLnglat,this.firstLnglat))
+    this.setStartData(this.createIng(this.lnglatArr, this.moveLnglat, this.firstLnglat))
   }
   clearData() {
     this.lnglatArr = []
     this.firstLnglat = null
   }
-  createIng(lnglatArr,moveLnglat,firstLnglat) {
+  createIng(lnglatArr, moveLnglat, firstLnglat) {
     let geojsonData = {
       "type": "FeatureCollection",
       "features": []
     }
-    geojsonData.features = this.createGeometry(lnglatArr,moveLnglat,firstLnglat);
+    geojsonData.features = this.createGeometry(lnglatArr, moveLnglat, firstLnglat);
     return geojsonData
   }
-  createEnd(lnglatArr,moveLnglat,firstLnglat,geojsonData) {
-    let f = this.createGeometry(lnglatArr,moveLnglat,firstLnglat)
+  createEnd(lnglatArr, moveLnglat, firstLnglat, geojsonData) {
+    let f = this.createGeometry(lnglatArr, moveLnglat, firstLnglat)
     for (let i = 0; i < f.length; i++) {
       geojsonData.features.push(f[i]);
     }
     return geojsonData
   }
-  createGeometry(lnglatArr,moveLnglat,firstLnglat) {
+  createGeometry(lnglatArr, moveLnglat, firstLnglat) {
     let featuresArr = []
     let ploygonArr = []
 
@@ -118,11 +120,12 @@ class DrawPolygonTool extends tool {
       linestring.geometry.coordinates.push(arr)
       ploygonArr.push(arr)
     }
-    if(lnglatArr.length>0){
+    if (lnglatArr.length > 0) {
       let arr = [moveLnglat.lng, moveLnglat.lat]
       linestring.geometry.coordinates.push(arr)
       ploygonArr.push(arr)
     }
+
     featuresArr.push(linestring)
     if (ploygonArr.length > 2) {
       let length = ploygonArr.length
@@ -130,6 +133,8 @@ class DrawPolygonTool extends tool {
         ploygonArr.push(ploygonArr[0])
       }
       ploygon.geometry.coordinates = [ploygonArr]
+      this.polygonData = ploygon.geometry
+
       featuresArr.push(ploygon)
     }
     return featuresArr
