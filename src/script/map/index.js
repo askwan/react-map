@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 import SourceLayer from './tool/SourceLayer'
 import DrawPolygonTool from './tool/DrawPolygonTool'
-import DrawPointTool from './tool/DrawPointTool'
+import DrawCircleTool from './tool/DrawCircleTool'
 import DrawRectangleTool from './tool/DrawRectangleTool'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
@@ -18,8 +18,7 @@ class Map extends Evented {
     this.initMap(container, callback)
 
     this.tool = {}
-    this.status = ""
-
+    this.source = ""
   }
   initMap(container, callback) {
     map = new mapboxgl.Map({
@@ -60,19 +59,19 @@ class Map extends Evented {
         })
       }
       map.on('mousemove', lngLatFn)
-      let source = new SourceLayer(map)
-      source.addSource()
+      this.source = new SourceLayer(map)
+      this.source.addSource()
       let polygonTool = new DrawPolygonTool(this)
       this.tool[polygonTool.getName()] = polygonTool
-      let pointTool = new DrawPointTool(this)
-      this.tool[pointTool.getName()] = pointTool
+      let circleTool = new DrawCircleTool(this)
+      this.tool[circleTool.getName()] = circleTool
       let rectangleTool = new DrawRectangleTool(this)
       this.tool[rectangleTool.getName()] = rectangleTool
       if (typeof callback === 'function') callback(this);
 
     });
   }
-  getMap(){
+  getMap() {
     return map
   }
   drawEndFn(geojsonData){
@@ -119,7 +118,8 @@ class Map extends Evented {
     for (let i in this.tool) {
       this.tool[i].unactive()
     }
-    this.tool[type].active()
+    let name = type + "Tool"
+    this.tool[name].active()
   }
 }
 

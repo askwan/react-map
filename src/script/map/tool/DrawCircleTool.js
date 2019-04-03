@@ -1,15 +1,13 @@
 import tool from './tool'
 
-class DrawPointTool extends tool {
+class DrawCircleTool extends tool {
   constructor(map) {
-    super()
+    super("circleTool")
   
-    this.map = map.getMap()
+    this.mapboxMap = map.getMap()
 
   }
-  getName() {
-    return "point"
-  }
+ 
   mouseMove() {
     console.log(111111)
   }
@@ -19,4 +17,4 @@ class DrawPointTool extends tool {
   }
 
 }
-export default DrawPointTool
+export default DrawCircleTool

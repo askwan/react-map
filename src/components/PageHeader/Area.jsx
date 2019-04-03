@@ -19,8 +19,8 @@ const operateList = [{
 },
 {
   icon: earthIcon,
-  type: 'point',
-  des: '创建一个点'
+  type: 'circle',
+  des: '绘制一个圆'
 },
 {
   icon: uploadIcon,
