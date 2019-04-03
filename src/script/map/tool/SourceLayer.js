@@ -27,7 +27,7 @@ class SourceLayer {
     //   "source": "source-toolend",
     //   "paint": {
     //     "fill-color": "#C0C4CC",
-    //     "fill-opacity": 0
+    //     "fill-opacity": 1
     //   },
     //   "filter": ["==", "$type", "Polygon"]
     // });

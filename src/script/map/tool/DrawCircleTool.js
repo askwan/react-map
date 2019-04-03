@@ -1,66 +1,98 @@
 import tool from './tool'
+import * as turf from '@turf/turf'
 
 class DrawCircleTool extends tool {
   constructor(map) {
-<<<<<<< HEAD:src/script/map/tool/DrawPointTool.js
-    super("pointTool")
-    this.mapjs = map
-=======
     super("circleTool")
-  
->>>>>>> d80c4bb7a3db7256a33ffe561be8811714ea8a47:src/script/map/tool/DrawCircleTool.js
+    this.mapjs = map
     this.mapboxMap = map.getMap()
 
-    this.mouseUpLnglat = []
-    this.mouseMoveLngLat = null
-    this.mouseMoveLngLatOne = null
+    this.moveLnglat = null;
+    this.startLngLat = null;
+    this.endLngLat = null;
   }
- 
+
   mouseMove(event) {
-    console.log(111111)
-    this.mouseMoveLngLat = event.lngLat
-    this.createIng()
-  }
-  mouseUp() {
-    console.log(22222222)
+    this.moveLnglat = event.lngLat
+    this.setStartData(this.createIng(this.startLngLat, this.moveLnglat))
 
   }
+  mouseclick(event) {
 
-  mouseclick(event){
-    let isEnd = false
-    let isInPoint = false
-    let lngLat = {
-      lnglat: event.lngLat,
-      time: String(new Date().getTime())
+    if (this.startLngLat) {
+      this.endLngLat = event.lngLat
+      this.setEndData(this.createEnd(this.startLngLat, this.endLngLat, this.mapjs.source.geojsonData))
+      this.mapjs.drawEndFn(this.polygonData)
+    } else {
+      this.startLngLat = event.lngLat
+      this.setStartData(this.createIng(this.startLngLat, this.moveLnglat))
     }
-
-
-    let features = this.mapboxMap.queryRenderedFeatures(event.point, {      //在某一点上查找所有特性
-      layers: ['source-tooling-point']
-    });
-
-    /******* */
-    for (let i = 0; i < features.length; i++) {
-      let f = features[i]
-      if (f.layer.id === "source-tooling-point") {
-
+  }
+  setStartData(jsonData) {
+    this.mapboxMap.getSource('source-tooling').setData(jsonData);
+  }
+  setEndData(jsonData) {
+    this.mapboxMap.getSource('source-toolend').setData(jsonData);
+    this.clearData()
+    this.setStartData(this.createIng(this.startLngLat, this.moveLnglat))
+  }
+  clearData() {
+    this.startLngLat = null
+    this.endLngLat = null
+  }
+  createIng(startLngLat, moveLnglat) {
+    let geojsonData = {
+      "type": "FeatureCollection",
+      "features": []
+    }
+    if (startLngLat && moveLnglat) {
+      geojsonData.features = this.createGeometry(startLngLat, moveLnglat, true);
+    }
+    return geojsonData;
+  }
+  createEnd(startLngLat, endLngLat, geojsonData) {
+    let f = this.createGeometry(startLngLat, endLngLat, false)
+    for (let i = 0; i < f.length; i++) {
+      geojsonData.features.push(f[i]);
+    }
+    console.log(geojsonData)
+    return geojsonData
+  }
+  createGeometry(one, two, show) {
+    let featuresArr = []
+    let start = [one.lng, one.lat]
+    let end = [two.lng, two.lat]
+    let linestring = {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": []
       }
+    };
+    if (show) {
+      linestring.geometry.coordinates.push(start)
+      linestring.geometry.coordinates.push(end)
+    } else {
+      let from = turf.point(start);
+      let to = turf.point(end);
+      let distance = turf.distance(from, to, {
+        units: 'miles'
+      });
+      let center = start;
+      let radius = distance;
+      let options = {
+        steps: 180,
+        units: 'miles'
+      };
+      let circle = turf.circle(center, radius, options);
+      for (let i = 0; i < circle.geometry.coordinates[0].length; i++) {
+        let g = circle.geometry.coordinates[0][i]
+        linestring.geometry.coordinates.push(g)
+      }
+      this.polygonData = circle.geometry
     }
-    /****** */
-
-    //判断是否是两点
-    if(this.mouseUpLnglat.length==2){
-
-    }else{
-      this.mouseUpLnglat.push(lngLat)
-      this.createIng()
-    }
-
+    featuresArr.push(linestring)
+    return featuresArr
   }
-
-  createIng(){
-
-  }
-
 }
 export default DrawCircleTool
