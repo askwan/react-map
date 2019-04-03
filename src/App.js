@@ -7,7 +7,7 @@ import Map from './script/map'
 import LeftTab from './components/LeftTab';
 import PageHeader from './components/PageHeader';
 import MapControl from './components/MapControl';
-
+import server from '@/server';
 let map;
 
 const getMap = ()=>{
@@ -17,11 +17,12 @@ const getMap = ()=>{
 class App extends Component {
   state={
     showLeft:false,
-    mapReady:false
+    mapReady:false,
+    selected:''
   }
   componentDidMount(){
-    console.log(1111)
     map = new Map(document.getElementById('map'),(map)=>{
+      map.setSourceUrl(server.getUrl());
       console.log('ready',map);
       this.setState({
         mapReady:true
@@ -33,10 +34,16 @@ class App extends Component {
       showLeft: bool
     })
   }
+  changeSelect(item){
+    console.log('item',item)
+    this.setState({
+      selected:item
+    })
+  }
   render() {
     return (
       <div className="App fill">
-        <PageHeader />
+        <PageHeader getMap={getMap} selected={this.state.selected} changeSelect={this.changeSelect.bind(this)} />
         <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} />
         {this.state.mapReady && <MapControl getMap={getMap} /> }
         <div id="map"></div>
