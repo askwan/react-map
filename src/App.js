@@ -24,6 +24,9 @@ class App extends Component {
     map = new Map(document.getElementById('map'),(map)=>{
       map.setSourceUrl(server.getUrl());
       console.log('ready',map);
+      map.on('drawEnd',data=>{
+        console.log(data,1111)
+      })
       this.setState({
         mapReady:true
       })

@@ -76,7 +76,7 @@ class Map extends Evented {
     return map
   }
   drawEndFn(geojsonData){
-    this.fire('drawEndRectangle', {
+    this.fire('drawEnd', {
       geojsonData: geojsonData
     })
   }
