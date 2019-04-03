@@ -18,8 +18,7 @@ class Map extends Evented {
     this.initMap(container, callback)
 
     this.tool = {}
-    this.status = ""
-
+    this.source = ""
   }
   initMap(container, callback) {
     map = new mapboxgl.Map({
@@ -60,8 +59,8 @@ class Map extends Evented {
         })
       }
       map.on('mousemove', lngLatFn)
-      let source = new SourceLayer(map)
-      source.addSource()
+      this.source = new SourceLayer(map)
+      this.source.addSource()
       let polygonTool = new DrawPolygonTool(this)
       this.tool[polygonTool.getName()] = polygonTool
       let pointTool = new DrawPointTool(this)
@@ -72,10 +71,10 @@ class Map extends Evented {
 
     });
   }
-  getMap(){
+  getMap() {
     return map
   }
-  drawEndFn(geojsonData){
+  drawEndFn(geojsonData) {
     this.fire('drawEndRectangle', {
       geojsonData: geojsonData
     })
@@ -119,7 +118,8 @@ class Map extends Evented {
     for (let i in this.tool) {
       this.tool[i].unactive()
     }
-    this.tool[type].active()
+    let name = type + "Tool"
+    this.tool[name].active()
   }
 }
 

@@ -1,6 +1,10 @@
 class SourceLayer {
   constructor(map) {
     this.map = map
+    this.geojsonData = {
+      "type": "FeatureCollection",
+      "features": []
+    }
   }
   addSource() {
     this.map.addSource("source-tooling", {
@@ -40,7 +44,7 @@ class SourceLayer {
       "type": "circle",
       "source": "source-tooling",
       "paint": {
-        "circle-radius": 6,
+        "circle-radius": 16,
         "circle-color": "#B42222"
       },
       "filter": ["==", "$type", "Point"],
@@ -82,7 +86,7 @@ class SourceLayer {
       "type": "circle",
       "source": "source-toolend",
       "paint": {
-        "circle-radius": 6,
+        "circle-radius": 16,
         "circle-color": "#B42222"
       },
       "filter": ["==", "$type", "Point"],
