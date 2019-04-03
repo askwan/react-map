@@ -44,7 +44,7 @@ class SourceLayer {
       "type": "circle",
       "source": "source-tooling",
       "paint": {
-        "circle-radius": 16,
+        "circle-radius": 10,
         "circle-color": "#B42222"
       },
       "filter": ["==", "$type", "Point"],
@@ -86,7 +86,7 @@ class SourceLayer {
       "type": "circle",
       "source": "source-toolend",
       "paint": {
-        "circle-radius": 16,
+        "circle-radius": 10,
         "circle-color": "#B42222"
       },
       "filter": ["==", "$type", "Point"],

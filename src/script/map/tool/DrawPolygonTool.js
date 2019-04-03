@@ -6,34 +6,16 @@ class DrawPolygonTool extends tool {
     this.mapjs = map
     this.mapboxMap = map.getMap()
 
+    this.polygonData = null
 
-    // this.geojsonData = {
-    //   "type": "FeatureCollection",
-    //   "features": []
-    // }
-    this.mouseUpLnglat = []
-    this.mouseMoveLngLat = null
-    this.mouseMoveLngLatOne = null
-
+    this.lnglatArr = []
+    this.moveLnglat = null
+    this.firstLnglat = null
   }
 
   mouseMove(event) {
-    this.mouseMoveLngLat = event.lngLat
-    this.createIng()
-
-//     console.log(this.mouseUpLnglat)
-// if(this.mouseUpLnglat.length>1){
-//  this.mouseUpLnglat.splice(0,1)
-//     let lngLat = {
-//       lnglat: event.lngLat,
-//       time: String(new Date().getTime())
-//     }
-//     this.mouseUpLnglat.push(lngLat)
-
-//     this.createIng()
-// }
-   
-
+    this.moveLnglat = event.lngLat
+    this.setStartData(this.createIng(this.lnglatArr,this.moveLnglat,this.firstLnglat))
   }
   mouseclick(event) {
     let isEnd = false
@@ -42,8 +24,8 @@ class DrawPolygonTool extends tool {
       lnglat: event.lngLat,
       time: String(new Date().getTime())
     }
-    if (!this.mouseMoveLngLatOne) {
-      this.mouseMoveLngLatOne = lngLat
+    if (!this.firstLnglat) {
+      this.firstLnglat = lngLat
     }
 
     let features = this.mapboxMap.queryRenderedFeatures(event.point, {
@@ -53,46 +35,53 @@ class DrawPolygonTool extends tool {
       let f = features[i]
       if (f.layer.id === "source-tooling-point") {
         isInPoint = true
-        let first = this.mouseMoveLngLatOne
+        let first = this.firstLnglat
 
-        if (this.mouseUpLnglat.length > 0 && f.properties.id === first.time) {
+        if (this.lnglatArr.length > 0 && f.properties.id === first.time) {
           isEnd = true
           first.time = String(new Date().getTime())
-          this.mouseUpLnglat.push(first)
+          this.lnglatArr.push(first)
         }
       }
     }
     if (isInPoint) {
       if (isEnd) {
-        this.createEnd()
+        this.setEndData(this.createEnd(this.lnglatArr,this.moveLnglat,this.firstLnglat, this.mapjs.source.geojsonData))
       }
     } else {
-      this.mouseUpLnglat.push(lngLat)
-      this.createIng()
+      this.lnglatArr.push(lngLat)
+      this.setStartData(this.createIng(this.lnglatArr,this.moveLnglat,this.firstLnglat))
     }
 
   }
-  createIng() {
+  setStartData(jsonData) {
+    this.mapboxMap.getSource('source-tooling').setData(jsonData);
+  }
+  setEndData(jsonData) {
+    this.mapboxMap.getSource('source-toolend').setData(jsonData);
+    this.clearData()
+    this.setStartData(this.createIng(this.lnglatArr,this.moveLnglat,this.firstLnglat))
+  }
+  clearData() {
+    this.lnglatArr = []
+    this.firstLnglat = null
+  }
+  createIng(lnglatArr,moveLnglat,firstLnglat) {
     let geojsonData = {
       "type": "FeatureCollection",
       "features": []
     }
-    geojsonData.features = this.createGeometry(this.mouseUpLnglat);
-    this.mapboxMap.getSource('source-tooling').setData(geojsonData);
+    geojsonData.features = this.createGeometry(lnglatArr,moveLnglat,firstLnglat);
+    return geojsonData
   }
-  createEnd() {
-
-    let f = this.createGeometry(this.mouseUpLnglat)
+  createEnd(lnglatArr,moveLnglat,firstLnglat,geojsonData) {
+    let f = this.createGeometry(lnglatArr,moveLnglat,firstLnglat)
     for (let i = 0; i < f.length; i++) {
-      this.mapjs.source.geojsonData.features.push(f[i]);
+      geojsonData.features.push(f[i]);
     }
-    this.mapboxMap.getSource('source-toolend').setData(this.mapjs.source.geojsonData);
-    this.mouseUpLnglat = []
-    this.mouseMoveLngLatOne = null
-    this.createIng()
-
+    return geojsonData
   }
-  createGeometry(mouseUpLnglat) {
+  createGeometry(lnglatArr,moveLnglat,firstLnglat) {
     let featuresArr = []
     let ploygonArr = []
 
@@ -110,9 +99,9 @@ class DrawPolygonTool extends tool {
         "coordinates": []
       }
     };
-    for (let i = 0; i < mouseUpLnglat.length; i++) {
-      let lnglat = mouseUpLnglat[i].lnglat
-      let time = mouseUpLnglat[i].time
+    for (let i = 0; i < lnglatArr.length; i++) {
+      let lnglat = lnglatArr[i].lnglat
+      let time = lnglatArr[i].time
       let arr = [lnglat.lng, lnglat.lat]
 
       let point = {
@@ -129,15 +118,15 @@ class DrawPolygonTool extends tool {
       linestring.geometry.coordinates.push(arr)
       ploygonArr.push(arr)
     }
-    if(mouseUpLnglat.length>0){
-      let arr = [this.mouseMoveLngLat.lng, this.mouseMoveLngLat.lat]
+    if(lnglatArr.length>0){
+      let arr = [moveLnglat.lng, moveLnglat.lat]
       linestring.geometry.coordinates.push(arr)
       ploygonArr.push(arr)
     }
     featuresArr.push(linestring)
     if (ploygonArr.length > 2) {
       let length = ploygonArr.length
-      if (ploygonArr[length - 1][0] !== this.mouseMoveLngLatOne.lnglat.lng && ploygonArr[length - 1][1] !== this.mouseMoveLngLatOne.lnglat.lat) {
+      if (ploygonArr[length - 1][0] !== firstLnglat.lnglat.lng && ploygonArr[length - 1][1] !== firstLnglat.lnglat.lat) {
         ploygonArr.push(ploygonArr[0])
       }
       ploygon.geometry.coordinates = [ploygonArr]
