@@ -3,7 +3,7 @@ import tool from './tool'
 class DrawRectangleTool extends tool {
   constructor(map) {
     super()
-    this.map = map
+    this.map = map.getMap()
 
     this.geojsonData = {
       "type": "FeatureCollection",

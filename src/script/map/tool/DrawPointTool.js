@@ -3,7 +3,8 @@ import tool from './tool'
 class DrawPointTool extends tool {
   constructor(map) {
     super()
-    this.map = map
+  
+    this.map = map.getMap()
 
   }
   getName() {

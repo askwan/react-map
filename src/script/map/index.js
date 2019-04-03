@@ -62,15 +62,18 @@ class Map extends Evented {
       map.on('mousemove', lngLatFn)
       let source = new SourceLayer(map)
       source.addSource()
-      let polygonTool = new DrawPolygonTool(map)
+      let polygonTool = new DrawPolygonTool(this)
       this.tool[polygonTool.getName()] = polygonTool
-      let pointTool = new DrawPointTool(map)
+      let pointTool = new DrawPointTool(this)
       this.tool[pointTool.getName()] = pointTool
-      let rectangleTool = new DrawRectangleTool(map)
+      let rectangleTool = new DrawRectangleTool(this)
       this.tool[rectangleTool.getName()] = rectangleTool
       if (typeof callback === 'function') callback(this);
 
     });
+  }
+  getMap(){
+    return map
   }
   setSourceUrl(url) {
     this.sourceUrl = url;
