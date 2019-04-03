@@ -49,7 +49,7 @@ export default class ContentCollapse extends Component {
           {
             this.props.metalist.map((item,index)=>(
               <Panel showArrow={false} header={<TitleElement item={item} changeTitle={this.changeTitle.bind(this)} />} key={index}>
-                <DragTable list={item.datas} getMap={this.props.getMap} />
+                <DragTable metadata={item} getMap={this.props.getMap} selectMeta={this.props.selectMeta} />
               </Panel>
             ))
           }

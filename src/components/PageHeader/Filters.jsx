@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 
 import React, { Component } from 'react'
-import { Input, Modal, Radio, Slider, Icon, Checkbox, Calendar, Button } from 'antd';
+import { Input, Modal, Radio, Slider, Icon, Checkbox, Calendar } from 'antd';
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 
@@ -157,7 +157,7 @@ export default class Filters extends Component {
         <FormListElement formLists = {this.state.formLists} selectOperate = {this.selectOperate.bind(this)} changeValue={this.changeValue.bind(this)} selected={this.state.selectedForm} />
         <ModalElement visible={this.state.visible} selected={this.state.selectedForm} okButton={this.okButton.bind(this)} calcelButton={this.calcelButton.bind(this)} changeRadio={this.changeRadio.bind(this)} changecheckbox={this.changecheckbox.bind(this)} />
         <div className="filters-footer flex-center">
-          <Button shape="round">提交</Button>
+          {/* <Button shape="round">提交</Button> */}
         </div>
       </div>
     )

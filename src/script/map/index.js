@@ -106,7 +106,7 @@ class Map extends Evented {
         tileSize: 256
       }
     }
-    map.addLayer(layer);
+    map.addLayer(layer,'source-tooling-polygon');
   }
 
   zoomTo(zoom) {

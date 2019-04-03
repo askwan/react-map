@@ -39,7 +39,9 @@ export default class MetaData{
       datalength:list.length,
       name:'AOI'+num,
       datas:list.map(el=>new Meta(el)),
-      coverage:1
+      coverage:1,
+      selects:[],
+      id:num
     }
     Object.assign(this,metadata);
   }

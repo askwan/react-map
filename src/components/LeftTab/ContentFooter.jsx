@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from 'antd';
+// import { Button } from 'antd';
 import PropTypes from 'prop-types'
 
 export default class ContentFooter extends Component {
@@ -10,7 +10,7 @@ export default class ContentFooter extends Component {
   render() {
     return (
       <div className="content-footer flex-center">
-        <Button onClick={this.props.save}>提交</Button>
+        {/* <Button onClick={this.props.save}>提交</Button> */}
       </div>
     )
   }

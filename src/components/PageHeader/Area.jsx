@@ -62,6 +62,8 @@ export default class Area extends Component {
       selected: item.icon
     })
     this.props.getMap().drawGeometry(item.type);
+    console.log(this.props)
+    this.props.changeSelect('');
     // if (item.type === 'ploygon') {
     //   this.props.getMap().drawPloygon();
     // } else if (item.type === 'reatIcon') {
