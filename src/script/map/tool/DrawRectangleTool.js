@@ -10,6 +10,8 @@ class DrawRectangleTool extends tool {
       "type": "FeatureCollection",
       "features": []
     }
+
+    this.polygonData=null
     this.mouseMoveLngLat = null
     this.mouseMoveLngLatOne = null
     this.mouseMoveLngLatTwo = null
@@ -26,7 +28,7 @@ class DrawRectangleTool extends tool {
     if (this.mouseMoveLngLatOne) {
       this.mouseMoveLngLatTwo = event.lngLat
       this.createEnd()
-      this.mapjs.drawEndFn(this.geojsonData)
+      this.mapjs.drawEndFn(this.polygonData)
 
     } else {
       this.mouseMoveLngLatOne = event.lngLat
@@ -87,9 +89,10 @@ class DrawRectangleTool extends tool {
     ploygonArr.push([minLng, maxLat])
     ploygonArr.push([maxLng, maxLat])
     ploygonArr.push([maxLng, minLat])
+    ploygonArr.push([minLng, minLat])
   
     ploygon.geometry.coordinates = [ploygonArr]
-
+    this.polygonData=ploygon.geometry
     featuresArr.push(linestring)
     featuresArr.push(ploygon)
     
