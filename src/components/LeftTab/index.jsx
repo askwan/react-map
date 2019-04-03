@@ -3,7 +3,7 @@ import ContentTitle from './ContentTitle';
 import ContentCollapse from './ContentCollapse';
 import ContentFooter from './ContentFooter';
 import LeftIcon from '@/assets/svgIcon/left.svg';
-
+import server from '@/server'
 
 
 export default class LeftTab extends Component {
@@ -11,14 +11,21 @@ export default class LeftTab extends Component {
   //   map:PropTypes.instanceOf(Map),
   // }
   state = {
-    layer:'l7041'
+    metadatalist:[]
   }
-//3123123
-//3123123
-//3123123 yeyeyeye
  
   toggleLeft(){
     this.props.toggleLeft(!this.props.showLeft);
+    if(!this.props.showLeft){
+      server.imageServer.queryByArea().then(metadata=>{
+        // console.log(metadata,'metaData')
+        this.state.metadatalist.push(metadata);
+        this.setState({
+          metadatalist:this.state.metadatalist
+        });
+        console.log(this.state.metadatalist)
+      })
+    }
   }
   save(){
     console.log('save');
@@ -30,7 +37,7 @@ export default class LeftTab extends Component {
       <div className={className}>
         <div className="left-content">
           <ContentTitle />
-          <ContentCollapse />
+          <ContentCollapse metalist = {this.state.metadatalist} getMap={this.props.getMap} />
           <ContentFooter save={this.save.bind(this)} />
         </div>
         <div className="left-bar flex-center" onClick={this.toggleLeft.bind(this)}>

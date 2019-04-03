@@ -15,9 +15,9 @@ const TitleElement = (props) =>{
   }
   return (
     <div className="flex-between">
-      <Input className="collapse-input" value={props.item.title} onClick={click} onChange={(event)=>props.changeTitle(event,props.item)} />
-      <div className="width-60 flex-center">{props.item.id}/5</div>
-      <div className="width-60 flex-center">{(Math.floor(Math.random()*10000)/100)+'%'}</div>
+      <Input className="collapse-input" value={props.item.name} onClick={click} onChange={(event)=>props.changeTitle(event,props.item)} />
+      <div className="width-60 flex-center">{props.item.length}/{props.item.datalength}</div>
+      <div className="width-60 flex-center">{(100)+'%'}</div>
       <img className="pointer" width="17" height="17" src={EditIcon} alt=""/>
       <img className="pointer" width="17" height="17" src={DeleteIcon} alt=""/>
       <img className="pointer" width="20" height="20" src={DownIcon} alt=""/>
@@ -38,14 +38,18 @@ export default class ContentCollapse extends Component {
       lists:this.state.lists
     })
   }
+  changePanel(index){
+    console.log(index,'change');
+    console.log(this.props.metalist[index]);
+  }
   render() {
     return (
       <div className="content-collapse">
-        <Collapse bordered={false} accordion>
+        <Collapse bordered={false} accordion onChange={this.changePanel.bind(this)}>
           {
-            lists.map(item=>(
-              <Panel showArrow={false} header={<TitleElement item={item} changeTitle={this.changeTitle.bind(this)} />} key={item.id}>
-                <DragTable />
+            this.props.metalist.map((item,index)=>(
+              <Panel showArrow={false} header={<TitleElement item={item} changeTitle={this.changeTitle.bind(this)} />} key={index}>
+                <DragTable list={item.datas} getMap={this.props.getMap} />
               </Panel>
             ))
           }
