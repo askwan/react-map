@@ -211,7 +211,6 @@ class DragSortingTable extends React.Component {
     let map = this.props.getMap();
     map.changeSource(b);
     this.props.selectMeta(this.props.metadata,a,b)
-    console.log(a,b)
   }
   render(){
     let rowSelection = {
@@ -223,7 +222,6 @@ class DragSortingTable extends React.Component {
       el.CloudPercent+='%';
       return el
     })
-    console.log(this.props,7777);
     return (
       <Table
         columns={columns}
