@@ -55,7 +55,6 @@ class DrawCircleTool extends tool {
     for (let i = 0; i < f.length; i++) {
       geojsonData.features.push(f[i]);
     }
-    console.log(geojsonData)
     return geojsonData
   }
   createGeometry(one, two, show) {
@@ -69,29 +68,36 @@ class DrawCircleTool extends tool {
         "coordinates": []
       }
     };
+    let circle = {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": []
+      }
+    };
     if (show) {
       linestring.geometry.coordinates.push(start)
       linestring.geometry.coordinates.push(end)
-    } else {
-      let from = turf.point(start);
-      let to = turf.point(end);
-      let distance = turf.distance(from, to, {
-        units: 'miles'
-      });
-      let center = start;
-      let radius = distance;
-      let options = {
-        steps: 180,
-        units: 'miles'
-      };
-      let circle = turf.circle(center, radius, options);
-      for (let i = 0; i < circle.geometry.coordinates[0].length; i++) {
-        let g = circle.geometry.coordinates[0][i]
-        linestring.geometry.coordinates.push(g)
-      }
-      this.polygonData = circle.geometry
+      featuresArr.push(linestring)
     }
-    featuresArr.push(linestring)
+    let from = turf.point(start);
+    let to = turf.point(end);
+    let radius = turf.distance(from, to, {
+      units: 'miles'
+    });
+    let options = {
+      steps: 180,
+      units: 'miles'
+    };
+    if (radius > 0) {
+      let geometry = turf.circle(start, radius, options);
+      for (let i = 0; i < geometry.geometry.coordinates[0].length; i++) {
+        let g = geometry.geometry.coordinates[0][i]
+        circle.geometry.coordinates.push(g)
+      }
+      this.polygonData = geometry.geometry
+      featuresArr.push(circle)
+    }
     return featuresArr
   }
 }
