@@ -23,10 +23,10 @@ class BodyRow extends React.Component {
 
     if(isOver){
       if(restProps.index>dragingIndex){
-        className += ' drop-over-downward';
+        // className += ' drop-over-downward';
       }
       if(restProps.index<dragingIndex){
-        className += 'drop-over-upward';
+        // className += 'drop-over-upward';
       }
     }
     return connectDragSource(
@@ -117,7 +117,6 @@ const columns = [{
 ];
 
 const detailRow = (record, index, indent, expanded)=>{
-  console.log(record,index,indent,expanded);
   return (
     <div>
       <Row>
@@ -209,19 +208,22 @@ class DragSortingTable extends React.Component {
     );
   }
   selectRow(a,b){
-    // console.log('change',a,b,c);
-    console.log(this.props)
     let map = this.props.getMap();
     map.changeSource(b);
+    this.props.selectMeta(this.props.metadata,a,b)
+    console.log(a,b)
   }
   render(){
     let rowSelection = {
-      onChange:this.selectRow.bind(this)
+      onChange:this.selectRow.bind(this),
+      hideDefaultSelections:true,
+      selectedRowKeys:this.props.metadata.selects
     }
-    let list = this.props.list.map(el=>{
+    let list = this.props.metadata.datas.map(el=>{
       el.CloudPercent+='%';
       return el
     })
+    console.log(this.props,7777);
     return (
       <Table
         columns={columns}

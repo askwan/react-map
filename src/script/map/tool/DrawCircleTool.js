@@ -1,9 +1,14 @@
 import tool from './tool'
 
-class DrawPointTool extends tool {
+class DrawCircleTool extends tool {
   constructor(map) {
+<<<<<<< HEAD:src/script/map/tool/DrawPointTool.js
     super("pointTool")
     this.mapjs = map
+=======
+    super("circleTool")
+  
+>>>>>>> d80c4bb7a3db7256a33ffe561be8811714ea8a47:src/script/map/tool/DrawCircleTool.js
     this.mapboxMap = map.getMap()
 
     this.mouseUpLnglat = []
@@ -58,4 +63,4 @@ class DrawPointTool extends tool {
   }
 
 }
-export default DrawPointTool
+export default DrawCircleTool

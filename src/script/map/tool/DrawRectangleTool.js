@@ -1,5 +1,6 @@
 import tool from './tool'
-
+// import * as turf from '@turf'
+import * as turf from '@turf/turf'
 class DrawRectangleTool extends tool {
   constructor(map) {
     super("rectangleTool")
@@ -47,13 +48,13 @@ class DrawRectangleTool extends tool {
       "features": []
     }
     if (startLngLat && moveLnglat) {
-      geojsonData.features = this.createGeometry(startLngLat, moveLnglat);
+      geojsonData.features = this.createGeometry(startLngLat, moveLnglat, true);
     }
     return geojsonData;
   }
   createEnd(startLngLat, endLngLat, geojsonData) {
 
-    let f = this.createGeometry(startLngLat, endLngLat)
+    let f = this.createGeometry(startLngLat, endLngLat, false)
     for (let i = 0; i < f.length; i++) {
       geojsonData.features.push(f[i]);
     }
@@ -61,9 +62,8 @@ class DrawRectangleTool extends tool {
 
   }
 
-  createGeometry(one, two) {
+  createGeometry(one, two, show) {
     let featuresArr = []
-    let ploygonArr = []
 
     let linestring = {
       "type": "Feature",
@@ -72,36 +72,22 @@ class DrawRectangleTool extends tool {
         "coordinates": []
       }
     };
-    let ploygon = {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": []
-      }
-    };
-    let minLng = one.lng > two.lng ? two.lng : one.lng
-    let minLat = one.lat > two.lat ? two.lat : one.lat
-    let maxLng = one.lng <= two.lng ? two.lng : one.lng
-    let maxLat = one.lat <= two.lat ? two.lat : one.lat
-    linestring.geometry.coordinates.push([minLng, minLat])
-    linestring.geometry.coordinates.push([minLng, maxLat])
-    linestring.geometry.coordinates.push([maxLng, maxLat])
-    linestring.geometry.coordinates.push([maxLng, minLat])
-    linestring.geometry.coordinates.push([minLng, minLat])
 
-    ploygonArr.push([minLng, minLat])
-    ploygonArr.push([minLng, maxLat])
-    ploygonArr.push([maxLng, maxLat])
-    ploygonArr.push([maxLng, minLat])
-    ploygonArr.push([minLng, minLat])
-
-    ploygon.geometry.coordinates = [ploygonArr]
-    this.polygonData = ploygon.geometry
+    let turfFn = turf.featureCollection([
+      turf.point([one.lng, one.lat]),
+      turf.point([two.lng, two.lat])
+    ]);
+    let enveloped = turf.envelope(turfFn);
+    for (let i = 0; i < enveloped.geometry.coordinates[0].length; i++) {
+      let g = enveloped.geometry.coordinates[0][i]
+      linestring.geometry.coordinates.push(g)
+    }
+    if (show) {
+      featuresArr.push(enveloped)
+    }
+    this.polygonData = enveloped.geometry
     featuresArr.push(linestring)
-    featuresArr.push(ploygon)
-
     return featuresArr
-
   }
 }
 export default DrawRectangleTool

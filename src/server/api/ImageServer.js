@@ -6,9 +6,16 @@ class ImageServer extends Base {
     this.url = option.url+'/metadata';
     console.log(this.url,77777777)
   }
-  queryByArea(option={}){
+  queryByArea(geogsonstr){
     return new Promise((resolve,reject)=>{
-      option.geoWkt = 'POLYGON((110.334 44.3182,111.766 45.2411,111.654 45.9166,110.224 43.9934,110.334 44.3182))';
+      // option.geoWkt = 'POLYGON((110.334 44.3182,111.766 45.2411,111.654 45.9166,110.224 43.9934,110.334 44.3182))';
+      let option = {
+        geoWkt:geogsonstr
+      }
+      if(!geogsonstr) {
+        reject('不合法')
+        return
+      }
       this.get('/query',option).then(res=>{
         if(res.status===200){
           
