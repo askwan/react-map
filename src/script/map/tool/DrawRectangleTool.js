@@ -2,62 +2,66 @@ import tool from './tool'
 
 class DrawRectangleTool extends tool {
   constructor(map) {
-    super()
-    this.mapjs=map
-    this.map = map.getMap()
+    super("rectangleTool")
+    this.mapjs = map
+    this.mapboxMap = map.getMap()
 
-    this.geojsonData = {
-      "type": "FeatureCollection",
-      "features": []
-    }
+    this.polygonData = null
 
-    this.polygonData=null
-    this.mouseMoveLngLat = null
-    this.mouseMoveLngLatOne = null
-    this.mouseMoveLngLatTwo = null
+    this.moveLnglat = null;
+    this.startLngLat = null;
+    this.endLngLat = null;
+
   }
-  getName() {
-    return "rectangle"
-  }
+
   mouseMove(event) {
-    this.mouseMoveLngLat = event.lngLat
-    this.createIng()
+    this.moveLnglat = event.lngLat
+    this.setStartData(this.createIng(this.startLngLat, this.moveLnglat))
 
   }
   mouseclick(event) {
-    if (this.mouseMoveLngLatOne) {
-      this.mouseMoveLngLatTwo = event.lngLat
-      this.createEnd()
+    if (this.startLngLat) {
+      this.endLngLat = event.lngLat
+      this.setEndData(this.createEnd(this.startLngLat, this.endLngLat, this.mapjs.source.geojsonData))
       this.mapjs.drawEndFn(this.polygonData)
-
     } else {
-      this.mouseMoveLngLatOne = event.lngLat
-      this.createIng()
+      this.startLngLat = event.lngLat
+      this.setStartData(this.createIng(this.startLngLat, this.moveLnglat))
     }
-
   }
-  createIng() {
+  setStartData(jsonData) {
+    this.mapboxMap.getSource('source-tooling').setData(jsonData);
+  }
+  setEndData(jsonData) {
+    this.mapboxMap.getSource('source-toolend').setData(jsonData);
+    this.clearData()
+    this.setStartData(this.createIng(this.startLngLat, this.moveLnglat))
+  }
+  clearData() {
+    this.startLngLat = null
+    this.endLngLat = null
+  }
+  createIng(startLngLat, moveLnglat) {
     let geojsonData = {
       "type": "FeatureCollection",
       "features": []
     }
-    if(this.mouseMoveLngLatOne&&this.mouseMoveLngLat){
-   geojsonData.features = this.createGeometry(this.mouseMoveLngLatOne,this.mouseMoveLngLat);
+    if (startLngLat && moveLnglat) {
+      geojsonData.features = this.createGeometry(startLngLat, moveLnglat);
     }
-    this.map.getSource('source-tooling').setData(geojsonData);
+    return geojsonData;
   }
-  createEnd() {
+  createEnd(startLngLat, endLngLat, geojsonData) {
 
-    let f = this.createGeometry(this.mouseMoveLngLatOne,this.mouseMoveLngLatTwo)
+    let f = this.createGeometry(startLngLat, endLngLat)
     for (let i = 0; i < f.length; i++) {
-      this.geojsonData.features.push(f[i]);
+      geojsonData.features.push(f[i]);
     }
-    this.map.getSource('source-toolend').setData(this.geojsonData);
-    this.mouseMoveLngLatOne = null
-    this.mouseMoveLngLatTwo = null
-    this.createIng()
+    return geojsonData
+
   }
-  createGeometry(one,two) {
+
+  createGeometry(one, two) {
     let featuresArr = []
     let ploygonArr = []
 
@@ -75,10 +79,10 @@ class DrawRectangleTool extends tool {
         "coordinates": []
       }
     };
-    let minLng=one.lng>two.lng?two.lng:one.lng
-    let minLat=one.lat>two.lat?two.lat:one.lat
-    let maxLng=one.lng<=two.lng?two.lng:one.lng
-    let maxLat=one.lat<=two.lat?two.lat:one.lat
+    let minLng = one.lng > two.lng ? two.lng : one.lng
+    let minLat = one.lat > two.lat ? two.lat : one.lat
+    let maxLng = one.lng <= two.lng ? two.lng : one.lng
+    let maxLat = one.lat <= two.lat ? two.lat : one.lat
     linestring.geometry.coordinates.push([minLng, minLat])
     linestring.geometry.coordinates.push([minLng, maxLat])
     linestring.geometry.coordinates.push([maxLng, maxLat])
@@ -90,12 +94,12 @@ class DrawRectangleTool extends tool {
     ploygonArr.push([maxLng, maxLat])
     ploygonArr.push([maxLng, minLat])
     ploygonArr.push([minLng, minLat])
-  
+
     ploygon.geometry.coordinates = [ploygonArr]
-    this.polygonData=ploygon.geometry
+    this.polygonData = ploygon.geometry
     featuresArr.push(linestring)
     featuresArr.push(ploygon)
-    
+
     return featuresArr
 
   }

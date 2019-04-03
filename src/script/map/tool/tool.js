@@ -1,7 +1,14 @@
 class Tool{
-  constructor(){
+  constructor(toolName){
     this.fnCollection = {};
     this.init()
+
+    this.name=toolName;
+    this.cursor="";
+
+  }
+  getName(){
+    return this.name;
   }
   init(){
     this.fnCollection.mouseMove = this.mouseMove.bind(this);
@@ -16,16 +23,16 @@ class Tool{
   mouseclick(event) {}
   mouseDBclick(event) {}
   active() {
-    this.map.on('mousemove', this.fnCollection.mouseMove)
-    this.map.on('mousedown', this.fnCollection.mouseDown)
-    this.map.on('mouseup', this.fnCollection.mouseUp)
-    this.map.on('click', this.fnCollection.mouseclick)
+    this.mapboxMap.on('mousemove', this.fnCollection.mouseMove)
+    this.mapboxMap.on('mousedown', this.fnCollection.mouseDown)
+    this.mapboxMap.on('mouseup', this.fnCollection.mouseUp)
+    this.mapboxMap.on('click', this.fnCollection.mouseclick)
   }
   unactive() {
-    this.map.off('mousemove', this.fnCollection.mouseMove)
-    this.map.off('mousedown', this.fnCollection.mouseDown)
-    this.map.off('mouseup', this.fnCollection.mouseUp)
-    this.map.off('click', this.fnCollection.mouseclick)
+    this.mapboxMap.off('mousemove', this.fnCollection.mouseMove)
+    this.mapboxMap.off('mousedown', this.fnCollection.mouseDown)
+    this.mapboxMap.off('mouseup', this.fnCollection.mouseUp)
+    this.mapboxMap.off('click', this.fnCollection.mouseclick)
   }
 }
 
