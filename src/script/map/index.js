@@ -55,12 +55,13 @@ class Map extends Evented {
     });
     map.on("load", () => {
       let lngLatFn = (event) => {
+        console.log(3333)
         this.fire('mousemove', {
           lngLat: event.lngLat
         })
       }
       map.on('mousemove', lngLatFn)
-      // map.off('mousemove',lngLatFn)
+      map.off('mousemove',lngLatFn)
       let source = new SourceLayer(map)
       source.addSource()
       let polygonTool = new DrawPolygonTool(map)
@@ -110,6 +111,7 @@ class Map extends Evented {
   }
 
   drawGeometry(type) {
+    console.log(this.tool)
     // if (this.status != type) {
     for (let i in this.tool) {
       this.tool[i].unactive()
