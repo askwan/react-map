@@ -75,6 +75,8 @@ class Map extends Evented {
     return map
   }
   drawEndFn(geojsonData){
+    this.clearDraw()
+
     this.fire('drawEnd', {
       geojsonData: geojsonData
     })
@@ -115,11 +117,14 @@ class Map extends Evented {
     return map.getZoom();
   }
   drawGeometry(type) {
+    this.clearDraw()
+    let name = type + "Tool"
+    this.tool[name].active()
+  }
+  clearDraw(){
     for (let i in this.tool) {
       this.tool[i].unactive()
     }
-    let name = type + "Tool"
-    this.tool[name].active()
   }
 }
 
