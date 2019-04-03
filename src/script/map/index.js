@@ -1,17 +1,24 @@
-// import Evented from '../utils/Evented'
+import Evented from './../utils/Evented'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import MapEventFn from './mapEventFn/MapEventFn'
+
+import SourceLayer from './tool/SourceLayer'
+import DrawPolygonTool from './tool/DrawPolygonTool'
+import DrawPointTool from './tool/DrawPointTool'
+import DrawRectangleTool from './tool/DrawRectangleTool'
+
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
 
 let map;
-let mapEventFn;
-class Map {
+
+
+class Map extends Evented {
   constructor(container, callback) {
-    // super();
+    super()
     this.initMap(container, callback)
 
-    this.drawMap = false
+    this.tool = {}
+    this.status = ""
 
   }
   initMap(container, callback) {
@@ -26,12 +33,28 @@ class Map {
       pitch: 0
     });
     map.on("load", () => {
-      mapEventFn = new MapEventFn(map)
+      let lngLatFn = (event) => {
+        this.fire('mousemove', {
+          lngLat: event.lngLat
+        })
+      }
+      map.on('mousemove', lngLatFn)
+      // map.off('mousemove',lngLatFn)
+      let source = new SourceLayer(map)
+      source.addSource()
+      let polygonTool = new DrawPolygonTool(map)
+      this.tool[polygonTool.getName()] = polygonTool
+      let pointTool = new DrawPointTool(map)
+      this.tool[pointTool.getName()] = pointTool
+      let rectangleTool = new DrawRectangleTool(map)
+      this.tool[rectangleTool.getName()] = rectangleTool
       if (typeof callback === 'function') callback(this);
+
     });
   }
-  getMapEventFn(){
-    return mapEventFn
+
+  asd() {
+    console.log(9999999)
   }
   zoomTo(zoom) {
     map.zoomTo(zoom);
@@ -40,18 +63,14 @@ class Map {
     return map.getZoom();
   }
 
-  drawPloygon() {
-    this.drawMap = true
-    mapEventFn.mouseClick(true)
-
-  }
-  drawReatIcon() {
-
-    console.log(222)
-  }
-  drawEarthIcon() {
-
-    console.log(333)
+  drawGeometry(type) {
+    // if (this.status != type) {
+    for (let i in this.tool) {
+      this.tool[i].unactive()
+    }
+    // }
+    console.log(this.tool, type)
+    this.tool[type].active()
   }
 
 

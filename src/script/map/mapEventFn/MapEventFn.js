@@ -1,30 +1,30 @@
 import Evented from '../../utils/Evented'
-
-
+import mapEventTool from './mapEventTool'
+let map
 class MapEventFn extends Evented {
-  constructor(map) {
+  constructor(props) {
     super()
-    this.map = map
+    map = props
 
+    mapEventTool.init(props)
     this.mouseMove()
+    this.mouseClick()
+  }
+  setType(type){
+    mapEventTool.setType(type)
   }
   mouseMove() {
-    this.map.on('mousemove', (event) => {
+    map.on('mousemove', (event) => {
       this.fire('mousemove', {
         lngLat: event.lngLat
       })
-      // mapEvent.mouseMove(event, this.drawMap)
+      mapEventTool.mouseMove(event)
     })
   }
-  mouseClick(open) {
-    let click = (e) => {
-      console.log(e)
-    }
-    if (open) {
-      this.map.on('click', click);
-    } else {
-      this.map.off('click', click);
-    }
+  mouseClick() {
+    map.on('click', (event) => {
+      mapEventTool.mouseClick(event)
+    });
   }
 }
 export default MapEventFn

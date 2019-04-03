@@ -14,12 +14,12 @@ const operateList = [{
 },
 {
   icon: reatIcon,
-  type: 'reatIcon',
+  type: 'rectangle',
   des: '绘制一个长方形'
 },
 {
   icon: earthIcon,
-  type: 'earthIcon',
+  type: 'point',
   des: '创建一个点'
 },
 {
@@ -61,13 +61,14 @@ export default class Area extends Component {
     this.setState({
       selected: item.icon
     })
-    if (item.type === 'ploygon') {
-      this.props.getMap().drawPloygon();
-    } else if (item.type === 'reatIcon') {
-      this.props.getMap().drawReatIcon();
-    } else if (item.type === 'earthIcon') {
-      this.props.getMap().drawEarthIcon();
-    } else { }
+    this.props.getMap().drawGeometry(item.type);
+    // if (item.type === 'ploygon') {
+    //   this.props.getMap().drawPloygon();
+    // } else if (item.type === 'reatIcon') {
+    //   this.props.getMap().drawReatIcon();
+    // } else if (item.type === 'earthIcon') {
+    //   this.props.getMap().drawEarthIcon();
+    // } else { }
   }
   render() {
     return (

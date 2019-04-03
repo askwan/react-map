@@ -13,7 +13,7 @@ export default class LocationTip extends Component {
   }
   componentWillMount(){
     let map = this.props.getMap();
-    map.getMapEventFn().on('mousemove',obj=>{
+    map.on('mousemove',obj=>{
       this.setState({
         posi:{
           lat:obj.lngLat.lat,
