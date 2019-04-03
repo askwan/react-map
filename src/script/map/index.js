@@ -75,6 +75,11 @@ class Map extends Evented {
   getMap(){
     return map
   }
+  drawEndFn(geojsonData){
+    this.fire('drawEndRectangle', {
+      geojsonData: geojsonData
+    })
+  }
   setSourceUrl(url) {
     this.sourceUrl = url;
   }

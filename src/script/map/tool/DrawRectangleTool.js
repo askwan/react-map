@@ -3,6 +3,7 @@ import tool from './tool'
 class DrawRectangleTool extends tool {
   constructor(map) {
     super()
+    this.mapjs=map
     this.map = map.getMap()
 
     this.geojsonData = {
@@ -25,6 +26,8 @@ class DrawRectangleTool extends tool {
     if (this.mouseMoveLngLatOne) {
       this.mouseMoveLngLatTwo = event.lngLat
       this.createEnd()
+      this.mapjs.drawEndFn(this.geojsonData)
+
     } else {
       this.mouseMoveLngLatOne = event.lngLat
       this.createIng()
