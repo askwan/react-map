@@ -6,8 +6,6 @@ class DrawRectangleTool extends tool {
     this.mapjs = map
     this.mapboxMap = map.getMap()
 
-    this.polygonData = null
-
     this.moveLnglat = null;
     this.startLngLat = null;
     this.endLngLat = null;
@@ -23,7 +21,7 @@ class DrawRectangleTool extends tool {
     if (this.startLngLat) {
       this.endLngLat = event.lngLat
       this.setEndData(this.createEnd(this.startLngLat, this.endLngLat, this.mapjs.source.geojsonData))
-      this.mapjs.drawEndFn(this.polygonData)
+      this.sendData()
     } else {
       this.startLngLat = event.lngLat
       this.setStartData(this.createIng(this.startLngLat, this.moveLnglat))

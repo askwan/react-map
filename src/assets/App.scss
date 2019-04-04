@@ -271,4 +271,13 @@ $gap:7px;
       width: 160px;
     }
   }
+  .control-floating-area{
+    position: absolute;
+    padding: 5px 10px;
+    border-radius: 4px;
+    z-index: 3;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+    
+  }
 }
