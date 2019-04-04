@@ -45,4 +45,7 @@ export default class MetaData{
     }
     Object.assign(this,metadata);
   }
+  clearSelect(){
+    this.selects = [];
+  }
 }

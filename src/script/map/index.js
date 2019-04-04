@@ -6,6 +6,7 @@ import SourceLayer from './tool/SourceLayer'
 import DrawPolygonTool from './tool/DrawPolygonTool'
 import DrawCircleTool from './tool/DrawCircleTool'
 import DrawRectangleTool from './tool/DrawRectangleTool'
+import Wkt from 'wicket'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
 
@@ -50,7 +51,7 @@ class Map extends Evented {
       zoom: 15, // starting zoom
       hash: true,
       dragRotate: false,
-      attributionControl: true,
+      pitchWithRotate:true,
       pitch: 0
     });
     map.on("load", () => {
@@ -93,16 +94,33 @@ class Map extends Evented {
   }
   changeSource(metas) {
     if (metas.length === 0) {
-      map.removeLayer('meta-layer');
-      map.removeSource('meta-layer');
+      this.clearLayer();
       return false
     }
     let sourceId = metas.map(el => el.mt_thumbimg).join(',');
-    let url = `${this.sourceUrl}/tile/getTile?mtThumbimgs=${sourceId}&col={x}&row={y}&level={z}&bboxSR=3857`;
+    let geojsonData = metas.map(el=>{
+      let geojson = new Wkt.Wkt().read(el.mt_databound).toJson();
+      let obj = {};
+      obj.type = 'Feature';
+      obj.properties = {
+        uid: el.mt_uuid
+      }
+      obj.id = el.mt_uuid;
+      obj.geometry = geojson;
+      return obj
+    })
     if (map.getLayer('meta-layer')) {
-      map.removeLayer('meta-layer');
-      map.removeSource('meta-layer');
+      this.clearLayer();
     }
+    map.addSource('metadata',{
+      "type": "geojson",
+      data:{
+        type:'FeatureCollection',
+        features:geojsonData
+      }
+    })
+    let url = `${this.sourceUrl}/tile/getTile?mtThumbimgs=${sourceId}&col={x}&row={y}&level={z}&bboxSR=3857`;
+    
     let layer = {
       id: 'meta-layer',
       type: 'raster',
@@ -111,10 +129,30 @@ class Map extends Evented {
         tiles: [
           url
         ],
-        tileSize: 256
-      }
+        tileSize: 256,
+        
+      },
+      minzoom:8
     }
-    map.addLayer(layer, 'source-tooling-polygon');
+    
+    map.addLayer(layer,'source-toolend-line');
+    map.addLayer({
+      "id": "metadata",
+      "type": "line",
+      "source": "metadata",
+      "paint": {
+        "line-color": "rgba(160, 9, 9, 1)",
+        "line-width": 1
+      },
+      maxzoom:8
+    })
+  }
+
+  clearLayer(){
+    map.removeLayer('meta-layer');
+    map.removeLayer('metadata');
+    map.removeSource('meta-layer');
+    map.removeSource('metadata');
   }
 
   zoomTo(zoom) {

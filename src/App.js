@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 
 import './assets/App.scss';
 import './assets/public/index.scss';
+import { Spin } from 'antd';
 import Map from './script/map'
 import LeftTab from './components/LeftTab';
 import PageHeader from './components/PageHeader';
 import MapControl from './components/MapControl';
 import server from '@/server';
 import Wkt from 'wicket'
+import MaskLayer from './components/MaskLayer';
 let map;
 
 const getMap = ()=>{
@@ -20,7 +22,8 @@ class App extends Component {
     showLeft:false,
     mapReady:false,
     selected:'',
-    metadatalist:[]
+    metadatalist:[],
+    isAjax:false
   }
   componentDidMount(){
     
@@ -39,13 +42,19 @@ class App extends Component {
     })
   }
   getAreaData(geoGsonStr){
+    this.setState({
+      isAjax:true
+    })
     server.imageServer.queryByArea(geoGsonStr).then(metadata=>{
       console.log(metadata,'metaData')
       this.state.metadatalist.push(metadata);
+      let metadatalist = this.state.metadatalist.map(el=>el.clearSelect());
       this.setState({
-        metadatalist:this.state.metadatalist,
-        showLeft:true
+        metadatalist:metadatalist,
+        showLeft:true,
+        isAjax:false
       });
+      map.clearLayer();
       // console.log(this.state.metadatalist)
     })
   }
@@ -60,9 +69,7 @@ class App extends Component {
     })
   }
   selectMeta(metadata,ids,metas){
-    console.log(metadata,'selectmeta');
-    let aim = this.state.metadatalist.find(el=>el.id === metadata.id);
-    aim.selects = ids;
+    metadata.selects = ids;
     this.setState({
       metadatalist:this.state.metadatalist
     })
@@ -70,6 +77,7 @@ class App extends Component {
   render() {
     return (
       <div className="App fill">
+        {this.state.isAjax===true && <MaskLayer />}
         <PageHeader getMap={getMap} selected={this.state.selected} changeSelect={this.changeSelect.bind(this)} />
         <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} metadatalist={this.state.metadatalist} selectMeta={this.selectMeta.bind(this)} />
         {this.state.mapReady && <MapControl getMap={getMap} /> }
