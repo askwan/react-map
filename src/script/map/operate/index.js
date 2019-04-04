@@ -5,6 +5,7 @@ export default class Operate {
   constructor(context){
     this.context = context;
     this.map = context.getMap();
+    this.zoom = 8;
   }
   changeSource(metas) {
     if (metas.length === 0) {
@@ -33,7 +34,7 @@ export default class Operate {
     if (this.map.getLayer('meta-layer')) {
       this.clearLayer();
     }
-    // console.log(centers,'centers')
+
     this.map.addSource('metadata',{
       "type": "geojson",
       data:{
@@ -42,14 +43,14 @@ export default class Operate {
       }
     });
     
-    // this.map.addSource('centermeta',{
-    //   "type": "geojson",
-    //   data:{
-    //     type:'FeatureCollection',
-    //     features:centers
-    //   }
-    // })
-    // this.addText();
+    this.map.addSource('centermeta',{
+      "type": "geojson",
+      data:{
+        type:'FeatureCollection',
+        features:centers
+      }
+    })
+    this.addText();
     let url = `${this.context.sourceUrl}/tile/getTile?ids=${sourceId}&col={x}&row={y}&level={z}&bboxSR=3857`;
     
     let layer = {
@@ -63,7 +64,7 @@ export default class Operate {
         tileSize: 256,
         
       },
-      minzoom:8
+      minzoom:this.zoom
     }
     
     this.map.addLayer(layer,'source-toolend-line');
@@ -75,7 +76,7 @@ export default class Operate {
         "line-color": "rgba(160, 9, 9, 1)",
         "line-width": 1
       },
-      maxzoom:8
+      maxzoom:this.zoom
     })
   }
 
@@ -83,8 +84,10 @@ export default class Operate {
     if(!this.map.getLayer('meta-layer')) return;
     this.map.removeLayer('meta-layer');
     this.map.removeLayer('metadata');
+    this.map.removeLayer('metauid');
     this.map.removeSource('meta-layer');
     this.map.removeSource('metadata');
+    this.map.removeSource('centermeta');
   }
   getArea(geomtry){
     let ploygon = turf.polygon(geomtry.coordinates);
@@ -99,26 +102,23 @@ export default class Operate {
   }
   addText(){
     this.map.addLayer({
-      id:'centermeta',
-      source:'centermeta',
-      type:'circle',
-      paint:{
-        "circle-radius":5,
-        'circle-color':'#f00'
-      }
-    });
-    this.map.addLayer({
       id:'metauid',
       source:'centermeta',
       type:'symbol',
       'layout': {
-        'text-field': ['concat', ['to-string', ['get', 'mag']], 'm'],
+        'text-field': ['get','uid'],
         'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-        'text-size': 12
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [0, 1.5]
         },
       'paint': {
-      'text-color': 'rgba(0,0,0,0.5)'
-      }
+        "text-color": "#202",
+        "text-halo-color": "#fff",
+        "text-halo-width": 2
+      },
+      maxzoom:this.zoom
     })
   }
 }

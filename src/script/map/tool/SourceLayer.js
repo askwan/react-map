@@ -93,5 +93,61 @@ class SourceLayer {
       "filter": ["==", "$type", "Point"],
     });
   }
+  addMetaLayer(){
+    this.map.addSource('metadata',{
+      "type": "geojson",
+      data:{
+        type:'FeatureCollection',
+        features:[]
+      }
+    });
+    this.map.addSource('centermeta',{
+      "type": "geojson",
+      data:{
+        type:'FeatureCollection',
+        features:[]
+      }
+    });
+    this.map.addLayer({
+      id: 'meta-layer',
+      type: 'raster',
+      source: {
+        type: 'raster',
+        tiles: [],
+        tileSize: 256,
+      },
+      minzoom:8
+    })
+
+    this.map.addLayer({
+      "id": "metadata",
+      "type": "line",
+      "source": "metadata",
+      "paint": {
+        "line-color": "rgba(160, 9, 9, 1)",
+        "line-width": 1
+      },
+      maxzoom:8
+    });
+    this.map.addLayer({
+      id:'metauid',
+      source:'centermeta',
+      type:'symbol',
+      'layout': {
+        'text-field': ['get','uid'],
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [0, 1.5]
+        },
+      'paint': {
+        "text-color": "#202",
+        "text-halo-color": "#fff",
+        "text-halo-width": 2
+      },
+      maxzoom:8
+    });
+  }
 }
 export default SourceLayer

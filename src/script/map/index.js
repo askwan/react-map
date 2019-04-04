@@ -45,7 +45,8 @@ class Map extends Evented {
           source: 'raster-tiles',
           minzoom: 0,
           maxzoom: 22
-        }]
+        }],
+        glyphs: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
       },
       center: [110.766, 44.2411], // starting position [lng, lat]
       zoom: 8, // starting zoom
@@ -63,7 +64,8 @@ class Map extends Evented {
       }
       map.on('mousemove', lngLatFn)
       this.source = new SourceLayer(map)
-      this.source.addSource()
+      this.source.addSource();
+      // this.source.addMetaLayer();
       let polygonTool = new DrawPolygonTool(this)
       this.tool[polygonTool.getName()] = polygonTool
       let circleTool = new DrawCircleTool(this)
