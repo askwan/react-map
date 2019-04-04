@@ -10,6 +10,8 @@ import MapControl from './components/MapControl';
 import server from '@/server';
 import Wkt from 'wicket'
 import MaskLayer from './components/MaskLayer';
+import * as turf from '@turf/turf'
+import { Modal } from 'antd';
 let map;
 
 const getMap = ()=>{
@@ -22,7 +24,8 @@ class App extends Component {
     mapReady:false,
     selected:'',
     metadatalist:[],
-    isAjax:false
+    isAjax:false,
+    warning:false
   }
   componentDidMount(){
     
@@ -30,6 +33,16 @@ class App extends Component {
       map.setSourceUrl(server.getUrl());
       console.log('ready',map);
       map.on('drawEnd',data=>{
+        console.log(data,'dfafa')
+        let bool = this.adjustArea(data.geojsonData);
+        console.log(bool,'bool')
+        if(bool) {
+          this.setState({
+            warning:true
+          })
+        }
+        
+
         let wkt = new Wkt.Wkt()
         wkt.fromObject(data.geojsonData)
         let geoGsonStr = wkt.write();
@@ -39,6 +52,17 @@ class App extends Component {
         mapReady:true
       })
     })
+  }
+  adjustArea(geomtry){
+    console.log(geomtry,'geom')
+    let ploygon = turf.polygon(geomtry.coordinates);
+    let area = turf.area(ploygon);
+    console.log(area,7777);
+    if(area>100000){
+      return false
+    }else {
+      return true
+    }
   }
   getAreaData(geoGsonStr){
     this.setState({
@@ -68,12 +92,18 @@ class App extends Component {
     })
   }
   selectMeta(metadata,ids,metas){
-    let metadatalist = this.state.matadatalist;
+    let metadatalist = this.state.metadatalist;
     metadatalist.map(el=>el.clearSelect());
     metadata.selects = ids;
+    console.log(metadatalist,78888888888888)
     this.setState({
-      metadatalist:this.state.metadatalist
+      metadatalist:metadatalist
     })
+  }
+  cancel(){
+   this.setState({
+     warning:false
+   }) 
   }
   render() {
     return (
@@ -83,6 +113,9 @@ class App extends Component {
         <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} metadatalist={this.state.metadatalist} selectMeta={this.selectMeta.bind(this)} />
         {this.state.mapReady && <MapControl getMap={getMap} /> }
         <div id="map"></div>
+        <Modal visible={this.state.warning} title="警告" onCancel={this.cancel.bind(this)} footer={null}>
+          <span>区域过大</span>
+        </Modal>
       </div>
     );
   }
