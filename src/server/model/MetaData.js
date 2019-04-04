@@ -47,5 +47,6 @@ export default class MetaData{
   }
   clearSelect(){
     this.selects = [];
+    return this
   }
 }

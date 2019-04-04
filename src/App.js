@@ -53,7 +53,7 @@ class App extends Component {
         showLeft:true,
         isAjax:false
       });
-      map.clearLayer();
+      // map.clearLayer();
       // console.log(this.state.metadatalist)
     })
   }
