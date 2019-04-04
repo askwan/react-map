@@ -41,6 +41,7 @@ class Tool {
     this.mapboxMap.off('click', this.fnCollection.mouseclick)
   }
   calculateArea() {
+    // console.log(this.polygonData)
     if (this.polygonData) {
       let polygon = turf.polygon(this.polygonData.coordinates);
       let area = turf.area(polygon);
