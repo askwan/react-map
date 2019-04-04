@@ -1,4 +1,4 @@
-import Evented from './../utils/Evented'
+import Evented from '../utils/Evented'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -20,6 +20,7 @@ class Map extends Evented {
 
     this.tool = {}
     this.source = ""
+    this.drawStatus=null
   }
   initMap(container, callback) {
     map = new mapboxgl.Map({
@@ -56,7 +57,8 @@ class Map extends Evented {
     map.on("load", () => {
       let lngLatFn = (event) => {
         this.fire('mousemove', {
-          lngLat: event.lngLat
+          lngLat: event.lngLat,
+          point: event.point
         })
       }
       map.on('mousemove', lngLatFn)
@@ -75,12 +77,17 @@ class Map extends Evented {
   getMap() {
     return map
   }
-  drawEndFn(geojsonData){
+  drawEndFn(data) {
     this.clearDraw()
-
     this.fire('drawEnd', {
-      geojsonData: geojsonData
+      geojsonData: data.geojsonData,
+      area: data.areaData
     })
+  }
+  calculateArea(){
+    if(this.drawStatus){
+      return this.tool[this.drawStatus].calculateArea()
+    }
   }
   setSourceUrl(url) {
     this.sourceUrl = url;
@@ -158,11 +165,13 @@ class Map extends Evented {
     this.clearDraw()
     let name = type + "Tool"
     this.tool[name].active()
+    this.drawStatus=name
   }
-  clearDraw(){
+  clearDraw() {
     for (let i in this.tool) {
       this.tool[i].unactive()
     }
+    this.drawStatus=null
   }
 }
 

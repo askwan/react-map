@@ -6,8 +6,6 @@ class DrawPolygonTool extends tool {
     this.mapjs = map
     this.mapboxMap = map.getMap()
 
-    this.polygonData = null
-
     this.lnglatArr = []
     this.moveLnglat = null
     this.firstLnglat = null
@@ -46,7 +44,7 @@ class DrawPolygonTool extends tool {
     if (isInPoint) {
       if (isEnd) {
         this.setEndData(this.createEnd(this.lnglatArr, this.moveLnglat, this.firstLnglat, this.mapjs.source.geojsonData))
-        this.mapjs.drawEndFn(this.polygonData)
+        this.sendData()
       }
     } else {
       this.lnglatArr.push(lngLat)
