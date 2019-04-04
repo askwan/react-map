@@ -40,8 +40,6 @@ class App extends Component {
           map.clearDrawLastOne();
           return
         }
-        
-
         let wkt = new Wkt.Wkt()
         wkt.fromObject(data.geojsonData)
         let geoGsonStr = wkt.write();
@@ -99,12 +97,18 @@ class App extends Component {
      warning:false
    });
   }
+  deletemeta(meta){
+    let list = this.state.metadatalist.filter(el=>el.id!==meta.id);
+    this.setState({
+      metadatalist:list
+    })
+  }
   render() {
     return (
       <div className="App fill">
         {this.state.isAjax===true && <MaskLayer />}
         <PageHeader getMap={getMap} selected={this.state.selected} changeSelect={this.changeSelect.bind(this)} />
-        <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} metadatalist={this.state.metadatalist} selectMeta={this.selectMeta.bind(this)} />
+        <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} metadatalist={this.state.metadatalist} selectMeta={this.selectMeta.bind(this)} deletemeta={this.deletemeta.bind(this)} />
         {this.state.mapReady && <MapControl getMap={getMap} /> }
         <div id="map"></div>
         <Modal centered visible={this.state.warning} title="警告" onCancel={this.cancel.bind(this)} footer={null}>

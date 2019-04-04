@@ -108,16 +108,20 @@ class SourceLayer {
         features:[]
       }
     });
-    this.map.addLayer({
-      id: 'meta-layer',
-      type: 'raster',
-      source: {
-        type: 'raster',
-        tiles: [],
-        tileSize: 256,
-      },
-      minzoom:8
+    this.map.addSource('meta-layer',{
+      "type": "vector",
+      tiles:[]
     })
+    // this.map.addLayer({
+    //   id: 'meta-layer',
+    //   type: 'raster',
+    //   source: {
+    //     type: 'raster',
+    //     tiles: [],
+    //     tileSize: 256,
+    //   },
+    //   minzoom:8
+    // })
 
     this.map.addLayer({
       "id": "metadata",

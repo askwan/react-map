@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Collapse, Input } from 'antd';
-import EditIcon from '@/assets/svgIcon/edit.svg';
+// import EditIcon from '@/assets/svgIcon/edit.svg';
 import DeleteIcon from '@/assets/svgIcon/delete.svg';
 import DownIcon from '@/assets/svgIcon/down.svg';
 
@@ -13,13 +13,18 @@ const TitleElement = (props) =>{
     event.preventDefault();
     event.stopPropagation();
   }
+  const deleteIt = (event) =>{
+    event.preventDefault();
+    event.stopPropagation();
+    props.deletemeta(props.item);
+  }
   return (
     <div className="flex-between">
       <Input className="collapse-input" value={props.item.name} onClick={click} onChange={(event)=>props.changeTitle(event,props.item)} />
       <div className="width-60 flex-center">{props.item.selects.length}/{props.item.datalength}</div>
       <div className="width-60 flex-center">{(100)+'%'}</div>
-      <img className="pointer" width="17" height="17" src={EditIcon} alt=""/>
-      <img className="pointer" width="17" height="17" src={DeleteIcon} alt=""/>
+      {/* <img className="pointer" width="17" height="17" src={EditIcon} alt=""/> */}
+      <img className="pointer" width="17" height="17" src={DeleteIcon} alt="" onClick={deleteIt}/>
       <img className="pointer" width="20" height="20" src={DownIcon} alt=""/>
     </div>
   )
@@ -47,7 +52,7 @@ export default class ContentCollapse extends Component {
         <Collapse bordered={false} accordion onChange={this.changePanel.bind(this)}>
           {
             this.props.metalist.map((item,index)=>(
-              <Panel showArrow={false} header={<TitleElement item={item} changeTitle={this.changeTitle.bind(this)} />} key={index}>
+              <Panel showArrow={false} header={<TitleElement item={item} changeTitle={this.changeTitle.bind(this)} deletemeta = {this.props.deletemeta} />} key={index}>
                 <DragTable metadata={item} getMap={this.props.getMap} selectMeta={this.props.selectMeta} />
               </Panel>
             ))

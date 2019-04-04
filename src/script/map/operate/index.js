@@ -34,7 +34,7 @@ export default class Operate {
     if (this.map.getLayer('meta-layer')) {
       this.clearLayer();
     }
-
+    // console.log(centers,'centers')
     this.map.addSource('metadata',{
       "type": "geojson",
       data:{
