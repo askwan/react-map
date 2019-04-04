@@ -15,8 +15,8 @@ export default class FloatingArea extends Component {
     let map = this.props.getMap();
     map.on('mousemove', obj => {
       this.setState({
-        top: obj.point.y,
-        left: obj.point.x+10,
+        top: window.event.clientY,
+        left: window.event.clientX+10,
       })
       if (map.drawStatus) {
         this.setState({
