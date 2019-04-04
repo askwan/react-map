@@ -53,7 +53,7 @@ class App extends Component {
         showLeft:true,
         isAjax:false
       });
-      // map.clearLayer();
+      map.clearLayer();
       // console.log(this.state.metadatalist)
     })
   }
@@ -68,6 +68,8 @@ class App extends Component {
     })
   }
   selectMeta(metadata,ids,metas){
+    let metadatalist = this.state.matadatalist;
+    metadatalist.map(el=>el.clearSelect());
     metadata.selects = ids;
     this.setState({
       metadatalist:this.state.metadatalist

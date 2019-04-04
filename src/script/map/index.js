@@ -149,6 +149,7 @@ class Map extends Evented {
   }
 
   clearLayer(){
+    if(!map.getLayer('meta-layer')) return;
     map.removeLayer('meta-layer');
     map.removeLayer('metadata');
     map.removeSource('meta-layer');
