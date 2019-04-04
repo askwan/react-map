@@ -39,11 +39,9 @@ export default class ContentCollapse extends Component {
     })
   }
   changePanel(index){
-    console.log(index,'change');
-    console.log(this.props.metalist[index]);
+
   }
   render() {
-    console.log(this.props,'444444444')
     return (
       <div className="content-collapse">
         <Collapse bordered={false} accordion onChange={this.changePanel.bind(this)}>
