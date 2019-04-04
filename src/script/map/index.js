@@ -48,7 +48,7 @@ class Map extends Evented {
         }]
       },
       center: [110.766, 44.2411], // starting position [lng, lat]
-      zoom: 15, // starting zoom
+      zoom: 8, // starting zoom
       hash: true,
       dragRotate: false,
       pitchWithRotate:true,
