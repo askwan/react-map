@@ -16,7 +16,7 @@ export default class FloatingArea extends Component {
     map.on('mousemove', obj => {
       this.setState({
         top: window.event.clientY,
-        left: window.event.clientX+10,
+        left: window.event.clientX + 10,
       })
       if (map.drawStatus) {
         this.setState({
@@ -27,16 +27,19 @@ export default class FloatingArea extends Component {
           display: "none"
         })
       }
-      let num=map.calculateArea()
-      this.setState({
-        area: num>1000000?num/1000000+"平方千米":num+"平方米"
-      })
+      let num = map.calculateArea()
+      if (num) {
+        this.setState({
+          area: num > 1000000 ? (num / 1000000).toFixed(2) + "平方千米" : num.toFixed(2) + "平方米"
+        })
+      }
+
     })
   }
-             
+
   render() {
     return (
-      <div className="control-floating-area" style={{top:this.state.top+"px",left:this.state.left+"px",display:this.state.display}}>面积：{this.state.area}
+      <div className="control-floating-area" style={{ top: this.state.top + "px", left: this.state.left + "px", display: this.state.display }}>面积：{this.state.area}
       </div>
     )
   }
