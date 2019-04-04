@@ -216,6 +216,7 @@ class DragSortingTable extends React.Component {
     let rowSelection = {
       onChange:this.selectRow.bind(this),
       hideDefaultSelections:true,
+      fixed:false,
       selectedRowKeys:this.props.metadata.selects
     }
     let list = this.props.metadata.datas.map(el=>{
