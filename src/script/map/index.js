@@ -7,6 +7,7 @@ import DrawPolygonTool from './tool/DrawPolygonTool'
 import DrawCircleTool from './tool/DrawCircleTool'
 import DrawRectangleTool from './tool/DrawRectangleTool'
 import Wkt from 'wicket'
+import Operate from './operate';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
 
@@ -71,7 +72,7 @@ class Map extends Evented {
       let rectangleTool = new DrawRectangleTool(this)
       this.tool[rectangleTool.getName()] = rectangleTool
       if (typeof callback === 'function') callback(this);
-
+      this.operate = new Operate(this);
     });
   }
   getMap() {
@@ -93,68 +94,11 @@ class Map extends Evented {
     this.sourceUrl = url;
   }
   changeSource(metas) {
-    if (metas.length === 0) {
-      this.clearLayer();
-      return false
-    }
-    let sourceId = metas.map(el => el.mt_uuid).join(',');
-    let geojsonData = metas.map(el=>{
-      
-      let geojson = new Wkt.Wkt().read(el.mt_databound).toJson();
-      let obj = {};
-      obj.type = 'Feature';
-      obj.properties = {
-        uid: el.mt_uuid
-      }
-      obj.id = el.mt_uuid;
-      obj.geometry = geojson;
-      return obj
-    })
-    if (map.getLayer('meta-layer')) {
-      this.clearLayer();
-    }
-    map.addSource('metadata',{
-      "type": "geojson",
-      data:{
-        type:'FeatureCollection',
-        features:geojsonData
-      }
-    })
-    let url = `${this.sourceUrl}/tile/getTile?ids=${sourceId}&col={x}&row={y}&level={z}&bboxSR=3857`;
-    
-    let layer = {
-      id: 'meta-layer',
-      type: 'raster',
-      source: {
-        type: 'raster',
-        tiles: [
-          url
-        ],
-        tileSize: 256,
-        
-      },
-      minzoom:8
-    }
-    
-    map.addLayer(layer,'source-toolend-line');
-    map.addLayer({
-      "id": "metadata",
-      "type": "line",
-      "source": "metadata",
-      "paint": {
-        "line-color": "rgba(160, 9, 9, 1)",
-        "line-width": 1
-      },
-      maxzoom:8
-    })
+    this.operate.changeSource(metas);
   }
 
   clearLayer(){
-    if(!map.getLayer('meta-layer')) return;
-    map.removeLayer('meta-layer');
-    map.removeLayer('metadata');
-    map.removeSource('meta-layer');
-    map.removeSource('metadata');
+    this.operate.clearLayer();
   }
 
   zoomTo(zoom) {
