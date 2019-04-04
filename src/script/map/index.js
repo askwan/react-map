@@ -84,6 +84,7 @@ class Map extends Evented {
       area: data.areaData
     })
   }
+  
   calculateArea(){
     if(this.drawStatus){
       return this.tool[this.drawStatus].calculateArea()
@@ -173,6 +174,10 @@ class Map extends Evented {
       this.tool[i].unactive()
     }
     this.drawStatus=null
+  }
+  clearDrawLastOne(){
+    this.source.geojsonData.features.splice(-1,1)
+    map.getSource('source-toolend').setData(this.source.geojsonData);
   }
 }
 

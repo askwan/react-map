@@ -63,6 +63,7 @@ class Tool {
     this.polygonData = null
 
   }
+
 }
 
 export default Tool;
