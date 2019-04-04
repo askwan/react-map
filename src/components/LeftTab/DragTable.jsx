@@ -219,7 +219,6 @@ class DragSortingTable extends React.Component {
       selectedRowKeys:this.props.metadata.selects
     }
     let list = this.props.metadata.datas.map(el=>{
-      el.CloudPercent+='%';
       return el
     })
     return (

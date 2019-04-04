@@ -16,7 +16,7 @@ const TitleElement = (props) =>{
   return (
     <div className="flex-between">
       <Input className="collapse-input" value={props.item.name} onClick={click} onChange={(event)=>props.changeTitle(event,props.item)} />
-      <div className="width-60 flex-center">{props.item.length}/{props.item.datalength}</div>
+      <div className="width-60 flex-center">{props.item.selects.length}/{props.item.datalength}</div>
       <div className="width-60 flex-center">{(100)+'%'}</div>
       <img className="pointer" width="17" height="17" src={EditIcon} alt=""/>
       <img className="pointer" width="17" height="17" src={DeleteIcon} alt=""/>

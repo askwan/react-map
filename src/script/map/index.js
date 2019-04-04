@@ -84,7 +84,6 @@ class Map extends Evented {
       geojsonData: data.geojsonData,
       area: data.areaData
     })
-    console.log(788888888888888888888)
   }
   calculateArea(){
     if(this.drawStatus){

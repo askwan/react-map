@@ -33,13 +33,13 @@ class App extends Component {
       map.setSourceUrl(server.getUrl());
       console.log('ready',map);
       map.on('drawEnd',data=>{
-        console.log(data,'dfafa')
         let bool = this.adjustArea(data.geojsonData);
-        console.log(bool,'bool')
-        if(bool) {
+        if(!bool) {
           this.setState({
             warning:true
           })
+          map.clearDrawLastOne();
+          return
         }
         
 
@@ -54,10 +54,8 @@ class App extends Component {
     })
   }
   adjustArea(geomtry){
-    console.log(geomtry,'geom')
     let ploygon = turf.polygon(geomtry.coordinates);
-    let area = turf.area(ploygon);
-    console.log(area,7777);
+    let area = turf.area(ploygon)/1000000;
     if(area>100000){
       return false
     }else {
@@ -69,7 +67,6 @@ class App extends Component {
       isAjax:true
     })
     server.imageServer.queryByArea(geoGsonStr).then(metadata=>{
-      console.log(metadata,'metaData')
       this.state.metadatalist.push(metadata);
       let metadatalist = this.state.metadatalist.map(el=>el.clearSelect());
       this.setState({
@@ -91,11 +88,10 @@ class App extends Component {
       selected:item
     })
   }
-  selectMeta(metadata,ids,metas){
+  selectMeta(metadata,ids){
     let metadatalist = this.state.metadatalist;
     metadatalist.map(el=>el.clearSelect());
     metadata.selects = ids;
-    console.log(metadatalist,78888888888888)
     this.setState({
       metadatalist:metadatalist
     })
@@ -103,7 +99,7 @@ class App extends Component {
   cancel(){
    this.setState({
      warning:false
-   }) 
+   });
   }
   render() {
     return (
@@ -113,8 +109,8 @@ class App extends Component {
         <LeftTab getMap={getMap} map={map} showLeft={this.state.showLeft} toggleLeft = {this.toggleLeft.bind(this)} metadatalist={this.state.metadatalist} selectMeta={this.selectMeta.bind(this)} />
         {this.state.mapReady && <MapControl getMap={getMap} /> }
         <div id="map"></div>
-        <Modal visible={this.state.warning} title="警告" onCancel={this.cancel.bind(this)} footer={null}>
-          <span>区域过大</span>
+        <Modal centered visible={this.state.warning} title="警告" onCancel={this.cancel.bind(this)} footer={null}>
+          <span>所选区域超出范围，请重新选择。</span>
         </Modal>
       </div>
     );
