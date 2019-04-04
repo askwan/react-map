@@ -8,6 +8,7 @@ import DrawCircleTool from './tool/DrawCircleTool'
 import DrawRectangleTool from './tool/DrawRectangleTool'
 import Wkt from 'wicket'
 
+
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
 
 let map;
@@ -83,6 +84,7 @@ class Map extends Evented {
       geojsonData: data.geojsonData,
       area: data.areaData
     })
+    console.log(788888888888888888888)
   }
   calculateArea(){
     if(this.drawStatus){
@@ -97,8 +99,9 @@ class Map extends Evented {
       this.clearLayer();
       return false
     }
-    let sourceId = metas.map(el => el.mt_thumbimg).join(',');
+    let sourceId = metas.map(el => el.mt_uuid).join(',');
     let geojsonData = metas.map(el=>{
+      
       let geojson = new Wkt.Wkt().read(el.mt_databound).toJson();
       let obj = {};
       obj.type = 'Feature';
@@ -119,7 +122,7 @@ class Map extends Evented {
         features:geojsonData
       }
     })
-    let url = `${this.sourceUrl}/tile/getTile?mtThumbimgs=${sourceId}&col={x}&row={y}&level={z}&bboxSR=3857`;
+    let url = `${this.sourceUrl}/tile/getTile?ids=${sourceId}&col={x}&row={y}&level={z}&bboxSR=3857`;
     
     let layer = {
       id: 'meta-layer',
