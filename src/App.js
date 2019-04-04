@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 import './assets/App.scss';
 import './assets/public/index.scss';
-import { Spin } from 'antd';
 import Map from './script/map'
 import LeftTab from './components/LeftTab';
 import PageHeader from './components/PageHeader';
