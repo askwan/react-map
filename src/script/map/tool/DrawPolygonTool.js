@@ -122,14 +122,21 @@ class DrawPolygonTool extends tool {
       let arr = [moveLnglat.lng, moveLnglat.lat]
       linestring.geometry.coordinates.push(arr)
       ploygonArr.push(arr)
+    console.log(3333,ploygonArr.length)
+
     }
 
     featuresArr.push(linestring)
-    if (ploygonArr.length > 2) {
-      let length = ploygonArr.length
-      if (ploygonArr[length - 1][0] !== firstLnglat.lnglat.lng && ploygonArr[length - 1][1] !== firstLnglat.lnglat.lat) {
-        ploygonArr.push(ploygonArr[0])
-      }
+    console.log(1111111,ploygonArr)
+    if (ploygonArr.length > 3&& lnglatArr.length > 0) {
+      ploygonArr.push(ploygonArr[0])
+
+      // let length = ploygonArr.length
+      // if (ploygonArr[length - 1][0] !== firstLnglat.lnglat.lng && ploygonArr[length - 1][1] !== firstLnglat.lnglat.lat) {
+      //   ploygonArr.push(ploygonArr[0])
+      // }
+    console.log(2222222,ploygonArr)
+
       ploygon.geometry.coordinates = [ploygonArr]
       this.polygonData = ploygon.geometry
       if (show) {
