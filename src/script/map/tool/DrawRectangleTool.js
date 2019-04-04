@@ -28,7 +28,6 @@ class DrawRectangleTool extends tool {
     }
   }
   setStartData(jsonData) {
-    console.log(jsonData)
     this.mapboxMap.getSource('source-tooling').setData(jsonData);
   }
   setEndData(jsonData) {
