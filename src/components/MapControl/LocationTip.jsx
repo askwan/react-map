@@ -23,9 +23,7 @@ export default class LocationTip extends Component {
     })
   }
   copy(event){
-    console.log(event);
-    let rng = document.body.createTexRange();
-    rng.moveToElementText()
+    
   }
   render() {
     return (

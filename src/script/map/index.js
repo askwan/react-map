@@ -6,7 +6,6 @@ import SourceLayer from './tool/SourceLayer'
 import DrawPolygonTool from './tool/DrawPolygonTool'
 import DrawCircleTool from './tool/DrawCircleTool'
 import DrawRectangleTool from './tool/DrawRectangleTool'
-import Wkt from 'wicket'
 import Operate from './operate';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
@@ -99,6 +98,9 @@ class Map extends Evented {
 
   clearLayer(){
     this.operate.clearLayer();
+  }
+  calcArea(geomtry){
+    return this.operate.getArea(geomtry)
   }
 
   zoomTo(zoom) {

@@ -10,7 +10,6 @@ import MapControl from './components/MapControl';
 import server from '@/server';
 import Wkt from 'wicket'
 import MaskLayer from './components/MaskLayer';
-import * as turf from '@turf/turf'
 import { Modal } from 'antd';
 let map;
 
@@ -54,8 +53,7 @@ class App extends Component {
     })
   }
   adjustArea(geomtry){
-    let ploygon = turf.polygon(geomtry.coordinates);
-    let area = turf.area(ploygon)/1000000;
+    let area = map.calcArea(geomtry);
     if(area>100000){
       return false
     }else {
