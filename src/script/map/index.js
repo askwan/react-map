@@ -176,6 +176,10 @@ class Map extends Evented {
     }
     this.drawStatus=null
   }
+  clearDrawLastOne(){
+    this.source.geojsonData.features.splice(-1,1)
+    map.getSource('source-toolend').setData(this.source.geojsonData);
+  }
 }
 
 export default Map
