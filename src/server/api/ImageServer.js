@@ -4,7 +4,6 @@ class ImageServer extends Base {
   constructor(option){
     super();
     this.url = option.url+'/metadata';
-    console.log(this.url,77777777)
   }
   queryByArea(geogsonstr){
     return new Promise((resolve,reject)=>{

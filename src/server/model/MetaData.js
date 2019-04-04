@@ -22,6 +22,7 @@ class Meta {
       storagePath:''
     }
     Object.assign(meta,option);
+    meta.cloudPercent += '%';
     Object.assign(this,meta);
   }
 }
