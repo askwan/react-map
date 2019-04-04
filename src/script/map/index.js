@@ -8,6 +8,7 @@ import DrawCircleTool from './tool/DrawCircleTool'
 import DrawRectangleTool from './tool/DrawRectangleTool'
 import Wkt from 'wicket'
 
+import * as turf from '@turf/turf'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieHRwZ2t4ayIsImEiOiJSUEhldmhZIn0.dJzz5bXztrZRAViAdmQvyQ';
 

@@ -1,4 +1,5 @@
 import tool from './tool'
+import * as turf from '@turf/turf'
 
 class DrawPolygonTool extends tool {
   constructor(map) {
@@ -81,7 +82,6 @@ class DrawPolygonTool extends tool {
   }
   createGeometry(lnglatArr, moveLnglat, firstLnglat, show) {
     let featuresArr = []
-    let ploygonArr = []
 
     let linestring = {
       "type": "Feature",
@@ -90,13 +90,8 @@ class DrawPolygonTool extends tool {
         "coordinates": []
       }
     };
-    let ploygon = {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": []
-      }
-    };
+  
+    let lineData = []
     for (let i = 0; i < lnglatArr.length; i++) {
       let lnglat = lnglatArr[i].lnglat
       let time = lnglatArr[i].time
@@ -115,29 +110,21 @@ class DrawPolygonTool extends tool {
       if (show) {
         featuresArr.push(point)
       }
-      linestring.geometry.coordinates.push(arr)
-      ploygonArr.push(arr)
+      lineData.push(arr)
     }
     if (show && lnglatArr.length > 0) {
       let arr = [moveLnglat.lng, moveLnglat.lat]
-      linestring.geometry.coordinates.push(arr)
-      ploygonArr.push(arr)
+      lineData.push(arr)
     }
-
+    if (lineData.length > 2) {
+      let line = turf.lineString(lineData);
+      let polygon = turf.lineToPolygon(line);
+      featuresArr.push(polygon)
+      this.polygonData = polygon.geometry
+    }
+    linestring.geometry.coordinates=lineData
     featuresArr.push(linestring)
-    if (ploygonArr.length > 3) {
-      if (show) {
-        ploygonArr.push(ploygonArr[0])
-
-      }
-
-      ploygon.geometry.coordinates = [ploygonArr]
-      this.polygonData = ploygon.geometry
-      if (show) {
-        featuresArr.push(ploygon)
-
-      }
-    }
+   
     return featuresArr
 
   }
