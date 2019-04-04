@@ -49,16 +49,16 @@ class Tool {
     return 0
   }
   sendData() {
-    let num = this.calculateArea()
-    if (num > 100000 * 1000000) {
-      console.log(num, '-------')
-    } else {
+    // let num = this.calculateArea()
+    // if (num > 100000 * 1000000) {
+    //   console.log(num, '-------')
+    // } else {
       let obj = {
         geojsonData: this.polygonData,
         areaData: this.calculateArea()
       }
       this.mapjs.drawEndFn(obj)
-    }
+    // }
     this.polygonData = null
 
   }
